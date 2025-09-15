@@ -31,18 +31,18 @@ function MenuOverlay({ open, onClose }) {
     {
       number: "05",
       label: "Newsroom",
-      to: "/newsroom",
+      to: "/PressReleasePage",
       sub: ["Press Releases"],
     },
   ];
 
   const rightLinks = [
     { number: "06", label: "Press Releases", to: "/PressReleasePage" },
-    { number: "07", label: "Portfolio", to: "/portfolio" },
+    { number: "07", label: "Portfolio", to: "/" },
   ];
 
   return (
-    <div className="fixed inset-0 bg-black text-white z-50">
+    <div className="fixed inset-0 bg-black text-white z-50 overflow-y-auto">
       {/* Header: Logo + Close */}
       <div className="absolute top-6 left-6">
         <Link to="/" onClick={onClose}>
@@ -63,35 +63,32 @@ function MenuOverlay({ open, onClose }) {
       </button>
 
       {/* Menu Content */}
-      <div className="flex h-full items-center justify-evenly px-24">
+      <div className="flex flex-col lg:flex-row h-full items-center justify-center lg:justify-evenly px-6 sm:px-10 lg:px-24 py-24 gap-16">
         {/* Left Section */}
-        <ul className="flex flex-col gap-10 text-3xl font-semibold font-poppins">
+        <ul className="flex flex-col gap-6 sm:gap-8 lg:gap-10 text-2xl sm:text-3xl font-semibold font-poppins text-center lg:text-left">
           {leftLinks.map((link, idx) => (
             <li
               key={idx}
               className="group flex flex-col relative cursor-pointer"
             >
-              {/* Main Link with Hover Slash */}
               <Link
                 to={link.to}
                 onClick={onClose}
-                className="flex items-baseline gap-3 transition"
+                className="flex items-baseline gap-3 justify-center lg:justify-start transition"
               >
                 <span className="text-sm text-gray-400 group-hover:text-[#405FFC] transition">
                   {link.number}
                 </span>
-                {/* Slash appears on hover */}
                 <span className="relative flex items-center gap-5 group-hover:text-[#405FFC] transition">
-                  <span className="absolute -left-10 text-[#405FFC] opacity-0 group-hover:opacity-100 transition">
+                  <span className="absolute -left-6 lg:-left-10 text-[#405FFC] opacity-0 group-hover:opacity-100 transition">
                     /
                   </span>
                   {link.label}
                 </span>
               </Link>
 
-              {/* Subtitles (appear on hover) */}
               {link.sub && (
-                <div className="ml-10 mt-1 text-xs text-gray-400 opacity-0 group-hover:opacity-100 transition-all">
+                <div className="mt-1 text-xs text-gray-400 opacity-0 group-hover:opacity-100 transition-all">
                   {link.sub.join(" | ")}
                 </div>
               )}
@@ -100,9 +97,9 @@ function MenuOverlay({ open, onClose }) {
         </ul>
 
         {/* Right Section */}
-        <div className="flex flex-col gap-10 text-3xl font-semibold font-poppins">
-          {/* Right links with hover effect */}
-          <ul className="flex flex-col gap-6">
+        <div className="flex flex-col gap-8 sm:gap-10 text-2xl sm:text-3xl font-semibold font-poppins text-center lg:text-left">
+          {/* Right links */}
+          <ul className="flex flex-col gap-4 sm:gap-6">
             {rightLinks.map((link, idx) => (
               <li
                 key={idx}
@@ -111,13 +108,13 @@ function MenuOverlay({ open, onClose }) {
                 <Link
                   to={link.to}
                   onClick={onClose}
-                  className="flex items-baseline gap-3 transition"
+                  className="flex items-baseline gap-3 justify-center lg:justify-start transition"
                 >
                   <span className="text-sm text-gray-400 group-hover:text-[#405FFC] transition">
                     {link.number}
                   </span>
                   <span className="relative flex items-center gap-5 group-hover:text-[#405FFC] transition">
-                    <span className="absolute -left-10 text-[#405FFC] opacity-0 group-hover:opacity-100 transition">
+                    <span className="absolute -left-6 lg:-left-10 text-[#405FFC] opacity-0 group-hover:opacity-100 transition">
                       /
                     </span>
                     {link.label}
@@ -128,35 +125,35 @@ function MenuOverlay({ open, onClose }) {
           </ul>
 
           {/* Contact */}
-          <div className="flex flex-col gap-3 text-sm">
+          <div className="flex flex-col gap-3 text-sm mt-6">
             <a
               href="mailto:contact@tapitubes.com"
-              className="flex items-center gap-2 text-[#405FFC]"
+              className="flex items-center justify-center lg:justify-start gap-2 text-[#405FFC]"
             >
-              <img src="/assets/Email.png" /> contact@tapitubes.com
+              <img src="/assets/Email.png" alt="email" /> contact@tapitubes.com
             </a>
             <a
               href="tel:181144421145"
-              className="flex items-center gap-2 text-[#405FFC]"
+              className="flex items-center justify-center lg:justify-start gap-2 text-[#405FFC]"
             >
-              <img src="/assets/Call.png" /> +91 9876543210
+              <img src="/assets/Call.png" alt="call" /> +91 9876543210
             </a>
             <a
               href="https://wa.me/919123931313"
               target="_blank"
               rel="noreferrer"
-              className="flex items-center gap-2 text-[#405FFC]"
+              className="flex items-center justify-center lg:justify-start gap-2 text-[#405FFC]"
             >
-              <img src="/assets/whatsApp.png" /> +91 9874563210
+              <img src="/assets/whatsApp.png" alt="whatsapp" /> +91 9874563210
             </a>
           </div>
 
           {/* Social Icons */}
-          <div className="flex gap-6 mt-4">
-            <img src="/assets/FbIcon.png" className="cursor-pointer" />
-            <img src="/assets/InstaIcon.png" className="cursor-pointer" />
-            <img src="/assets/LinkdinIcon.png" className="cursor-pointer" />
-            <img src="/assets/UtubeIcon.png" className="cursor-pointer" />
+          <div className="flex gap-6 mt-6 justify-center lg:justify-start">
+            <img src="/assets/FbIcon.png" className="cursor-pointer w-6 sm:w-7" alt="fb"/>
+            <img src="/assets/InstaIcon.png" className="cursor-pointer w-6 sm:w-7" alt="insta"/>
+            <img src="/assets/LinkdinIcon.png" className="cursor-pointer w-6 sm:w-7" alt="linkedin"/>
+            <img src="/assets/UtubeIcon.png" className="cursor-pointer w-6 sm:w-7" alt="yt"/>
           </div>
         </div>
       </div>

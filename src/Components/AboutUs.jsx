@@ -1,9 +1,16 @@
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import aboutLeft from "/assets/craneLeft.png";
 import aboutRight from "/assets/craneRight.png";
 
 export default function AboutUs() {
+  const navigate = useNavigate();
+
+  const handleKnowMore = () => {
+    navigate("/about-us-detail"); 
+  };
+
   return (
     <section
       id="About-us"
@@ -67,6 +74,7 @@ export default function AboutUs() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="mt-8 sm:mt-10 px-6 sm:px-8 py-2 sm:py-3 border border-[#405FFC] text-[#405FFC] font-poppins font-bold uppercase rounded-xl hover:bg-[#405FFC] hover:text-white transition"
+            onClick={handleKnowMore} // ✅ Add click
           >
             Know More
           </motion.button>

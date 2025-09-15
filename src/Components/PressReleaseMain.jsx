@@ -41,7 +41,7 @@ const pressReleases = [
     ],
   },
   {
-    year: 2021,
+    year: 2022,
     items: [
       {
         date: "Delhi / Mumbai | 25 July, 2025",
@@ -157,7 +157,8 @@ const PressReleaseMain = () => {
                 <p className="text-[#dfce7c] mb-4">{overlay.item.date}</p>
 
                 {/* Scrollable description */}
-                <div className="overflow-y-auto text-[#ffffff] flex-1 relative">
+                {/* Scrollable description */}
+                <div className="overflow-y-auto text-[#ffffff] flex-1 relative custom-scroll">
                   <p className="mb-4">{overlay.item.description}</p>
                   {/* Add more content if needed to enable scrolling */}
                 </div>

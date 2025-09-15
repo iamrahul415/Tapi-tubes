@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import Navbar from "./Components/Navbar";
 import HomePage from "./Pages/HomePage";
+import AboutUsDetail from "./Pages/AboutUsDetail";
 import ProductPage from "./Pages/ProductPage";
 import Product1Page from "./Pages/Product1Page";
 import Product2Page from "./Pages/Product2Page";
@@ -38,6 +39,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/about-us-detail" element={<AboutUsDetail />} />
         <Route path="/Products" element={<ProductPage />} />
         <Route path="/Product1Page" element={<Product1Page />} />
         <Route path="/Product2Page" element={<Product2Page />} />
