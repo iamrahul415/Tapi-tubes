@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import product1 from "/assets/Product1Img.jpg";
 import product2 from "/assets/Product2Img.png";
 import product3 from "/assets/Product3Img.jpg";
@@ -31,7 +32,7 @@ export default function Portfolio() {
   ];
 
   return (
-    <section className="relative w-full min-h-screen bg-cover bg-center py-16 sm:py-20">
+    <section className="relative w-full min-h-screen bg-cover bg-center py-16 sm:py-20 overflow-hidden">
       {/* Overlay Background */}
       <div
         className="absolute inset-0 bg-black/100"
@@ -43,13 +44,26 @@ export default function Portfolio() {
       ></div>
 
       <div className="relative max-w-6xl mx-auto text-center text-white px-4 sm:px-6 lg:px-8">
-        {/* Headings */}
-        <h1 className="text-3xl sm:text-4xl lg:text-[55px] text-[#405FFC] mb-4 font-semibold">
+        {/* Headings with animation */}
+        <motion.h1
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          viewport={{ once: true }}
+          className="text-3xl sm:text-4xl lg:text-[55px] text-[#405FFC] mb-4 font-semibold uppercase"
+        >
           Portfolio
-        </h1>
-        <h2 className="text-base sm:text-lg lg:text-[45px] mb-10 text-[#FFFFFF] font-semibold">
+        </motion.h1>
+
+        <motion.h2
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
+          viewport={{ once: true }}
+          className="text-base sm:text-lg lg:text-[45px] mb-10 text-[#FFFFFF] font-semibold"
+        >
           What product do you wish to enquire / purchase ?
-        </h2>
+        </motion.h2>
 
         {/* Product Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
