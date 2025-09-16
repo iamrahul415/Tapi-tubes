@@ -56,7 +56,7 @@ function MenuOverlay({ open, onClose }) {
         </Link>
       </div>
       <button
-        className="absolute top-6 right-8 text-[#FFFFFF] hover:text-white tracking-widest text-sm"
+        className="absolute top-6 right-8 text-[#FFFFFF] hover:text-[#405FFC] tracking-widest text-sm"
         onClick={onClose}
       >
         CLOSE

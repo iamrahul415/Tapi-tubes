@@ -20,7 +20,7 @@ function Search({ open, onClose }) {
       </div>
 
       <X
-        className="absolute top-6 right-6 w-8 h-8 cursor-pointer text-white hover:text-red-400 transition"
+        className="absolute top-6 right-6 w-8 h-8 cursor-pointer text-white hover:text-[#405FFC] transition"
         onClick={onClose}
       />
 

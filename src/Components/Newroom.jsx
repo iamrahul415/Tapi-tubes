@@ -5,157 +5,345 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 const Newsroom = () => {
-  const years = [2023, 2024, 2025];
+  const years = [2020, 2021, 2022, 2023, 2024, 2025];
   const currentYear = new Date().getFullYear();
   const initialIndex = years.includes(currentYear)
     ? years.indexOf(currentYear)
-    : years.length - 1;
+    : years.length - 1; // Default to 2025 if current year not in range
 
   const [activeIndex, setActiveIndex] = useState(initialIndex);
   const sectionRef = useRef(null);
-  const yearBoxRef = useRef(null);
+  const yearContainerRef = useRef(null);
   const contentRef = useRef(null);
-  const prevYearRef = useRef(null);
-  const nextYearRef = useRef(null);
-  const lastActiveIndex = useRef(activeIndex);
+  const contentItemsRef = useRef([]);
+  const digitWheelRef = useRef(null);
+  const isAnimating = useRef(false);
 
   const newsData = {
+    2020: [
+      {
+        title: "Tapi Tubes establishes state-of-the-art manufacturing unit",
+        location: "Mumbai",
+        date: "February 2020",
+      },
+      {
+        title:
+          "Strategic partnership with leading infrastructure companies announced",
+        location: "Delhi",
+        date: "June 2020",
+      },
+      {
+        title: "Launch of eco-friendly steel pipe production initiative",
+        location: "Chennai",
+        date: "October 2020",
+      },
+    ],
+    2021: [
+      {
+        title: "Tapi Tubes expands production capacity with new facilities",
+        location: "Pune",
+        date: "March 2021",
+      },
+      {
+        title: "Breakthrough in innovative tube technology introduced",
+        location: "Mumbai",
+        date: "July 2021",
+      },
+      {
+        title: "Awarded recognition for environmental sustainability practices",
+        location: "Bangalore",
+        date: "November 2021",
+      },
+    ],
+    2022: [
+      {
+        title: "Tapi Tubes introduces advanced grades of steel tubes",
+        location: "Delhi",
+        date: "January 2022",
+      },
+      {
+        title:
+          "Partnership with renewable energy projects for green steel solutions",
+        location: "Chennai",
+        date: "May 2022",
+      },
+      {
+        title:
+          "Completion of digital transformation across manufacturing units",
+        location: "Mumbai",
+        date: "September 2022",
+      },
+    ],
     2023: [
-      { title: "New plant setup in Chennai", location: "Chennai", date: "Mar 2023" },
-      { title: "Steel innovation award received", location: "Mumbai", date: "Jun 2023" },
-      { title: "Capacity expansion for ERW tubes", location: "Delhi", date: "Aug 2023" },
+      {
+        title: "New ERW pipe plant established in Chennai",
+        location: "Chennai",
+        date: "March 2023",
+      },
+      {
+        title:
+          "Tapi Tubes wins national award for innovation in steel solutions",
+        location: "Mumbai",
+        date: "June 2023",
+      },
+      {
+        title: "Expansion in production capacity for structural tubes",
+        location: "Delhi",
+        date: "August 2023",
+      },
     ],
     2024: [
-      { title: "ERW Tubes production boost in Pune", location: "Pune", date: "Jan 2024" },
-      { title: "New sustainability initiative launched", location: "Mumbai", date: "Apr 2024" },
-      { title: "Partnership with JSW Steel announced", location: "Delhi", date: "Aug 2024" },
+      {
+        title:
+          "Tapi Tubes launches Magnelis® - unique import substitute to power India’s renewable energy transition",
+        location: "Mumbai",
+        date: "September 2024",
+      },
+      {
+        title:
+          "Tapi Tubes introduces Optigal® – world-class product with industry-leading warranty",
+        location: "Mumbai",
+        date: "August 2024",
+      },
+      {
+        title:
+          "Tapi Tubes renews partnership with Protean to advance 'Beti Padhao' scholarship initiative",
+        location: "Mumbai",
+        date: "March 2024",
+      },
     ],
     2025: [
-      { title: "Tapitubes introduces galvanized pipe series", location: "Delhi", date: "Feb 2025" },
-      { title: "Capacity doubled for ERW black tubes", location: "Mumbai", date: "Jun 2025" },
-      { title: "Awarded Best Manufacturing Company", location: "Bangalore", date: "Oct 2025" },
+      {
+        title: "Tapi Tubes unveils next-generation steel tube solutions",
+        location: "Delhi",
+        date: "February 2025",
+      },
+      {
+        title:
+          "Achieves major milestone towards carbon-neutral steel production",
+        location: "Mumbai",
+        date: "June 2025",
+      },
+      {
+        title:
+          "Tapi Tubes announces global expansion through strategic partnerships",
+        location: "Bangalore",
+        date: "October 2025",
+      },
     ],
   };
+
+  // One-direction navigation function
+  const getNextIndex = (currentIndex) => (currentIndex + 1) % years.length;
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      const totalScrollLength = window.innerHeight * years.length; // total scroll length proportional to number of years
+      const totalScrollLength = window.innerHeight * 3; // Increased scroll length for smoother control
 
-      ScrollTrigger.create({
+      // Initial animation on mount
+      gsap.fromTo(
+        yearContainerRef.current,
+        { opacity: 0 },
+        { opacity: 1, duration: 1.2, ease: "power3.out" }
+      );
+
+      gsap.fromTo(
+        contentRef.current,
+        { x: 100, opacity: 0 },
+        { x: 0, opacity: 1, duration: 1, delay: 0.3, ease: "power3.out" }
+      );
+
+      const scrollTrigger = ScrollTrigger.create({
         trigger: sectionRef.current,
         start: "top top",
         end: () => `+=${totalScrollLength}`,
-        scrub: 0.5,
-        pin: true, // ✅ pin the whole section
+        scrub: 0.8,
+        pin: true,
+        anticipatePin: 1,
         onUpdate: (self) => {
-          const progress = gsap.utils.clamp(0, 1, self.progress);
-          const index = Math.floor(progress * years.length);
-          if (index !== lastActiveIndex.current && index < years.length) {
-            animateYearChange(index);
-            lastActiveIndex.current = index;
-          }
+          if (isAnimating.current) return;
 
-          // Animate previous/next year positions and scales
-          if (prevYearRef.current) {
-            gsap.to(prevYearRef.current, {
-              y: -50 + progress * 50,
-              scale: 0.8 + 0.2 * progress,
-              opacity: 0.4 + 0.6 * (1 - progress),
-              duration: 0.3,
-            });
-          }
-          if (nextYearRef.current) {
-            gsap.to(nextYearRef.current, {
-              y: 50 - progress * 50,
-              scale: 0.8 + 0.2 * progress,
-              opacity: 0.4 + 0.6 * (1 - progress),
-              duration: 0.3,
-            });
+          // Calculate progress and trigger year changes (one direction only)
+          const progress = self.progress;
+          const segmentSize = 1 / years.length;
+          const currentSegment = Math.floor(progress / segmentSize);
+
+          // Only move forward when crossing segment boundaries
+          if (currentSegment !== activeIndex && currentSegment < years.length) {
+            animateYearChange(currentSegment);
           }
         },
       });
+
+      return () => scrollTrigger.kill();
     }, sectionRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [activeIndex, years.length]);
 
   const animateYearChange = (newIndex) => {
+    if (isAnimating.current || newIndex === activeIndex) return;
+
+    isAnimating.current = true;
+
     const tl = gsap.timeline({
-      defaults: { duration: 0.5, ease: "power2.out" },
-      onComplete: () => setActiveIndex(newIndex),
+      defaults: { ease: "power3.out" },
+      onComplete: () => {
+        setActiveIndex(newIndex);
+        isAnimating.current = false;
+      },
     });
 
-    tl.to(yearBoxRef.current, { y: -50, opacity: 0 });
-    tl.to(contentRef.current, { y: 30, opacity: 0 }, "<");
+    // Wheel rotation animation for last 2 digits
+    tl.to(digitWheelRef.current, {
+      y: -100, // Move current digit up
+      opacity: 0,
+      duration: 0.4,
+    }).to(digitWheelRef.current, {
+      y: 0, // Bring new digit from bottom
+      opacity: 1,
+      duration: 0.4,
+      ease: "back.out(1.2)",
+    });
 
-    tl.to(yearBoxRef.current, { y: 0, opacity: 1 });
-    tl.to(contentRef.current, { y: 0, opacity: 1 }, "<");
+    // Content wheel-like rotation animation
+    tl.to(
+      contentItemsRef.current,
+      {
+        rotationX: -20,
+        y: -30,
+        opacity: 0,
+        stagger: 0.05,
+        duration: 0.3,
+      },
+      0
+    ).to(
+      contentItemsRef.current,
+      {
+        rotationX: 0,
+        y: 0,
+        opacity: 1,
+        stagger: 0.08,
+        duration: 0.6,
+        ease: "back.out(1.1)",
+      },
+      0.4
+    );
   };
 
-  const centerYear = years[activeIndex];
-  const prevYear = years[activeIndex - 1] ?? null;
-  const nextYear = years[activeIndex + 1] ?? null;
+  // Animate content items when activeIndex changes
+  useEffect(() => {
+    const items = contentItemsRef.current.filter(Boolean);
+    if (items.length > 0) {
+      gsap.fromTo(
+        items,
+        {
+          y: 30,
+          opacity: 0,
+          scale: 0.95,
+        },
+        {
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          duration: 0.8,
+          stagger: 0.1,
+          ease: "power3.out",
+          delay: 0.2,
+        }
+      );
+    }
+  }, [activeIndex]);
+
+  const currentYearData = newsData[years[activeIndex]];
 
   return (
     <section
       ref={sectionRef}
-      className="relative w-full min-h-screen bg-black text-white py-16 px-4 sm:px-6 md:px-12 overflow-hidden flex flex-col"
+      className="relative w-full min-h-screen bg-black text-white py-16 px-4 sm:px-6 md:px-12 overflow-hidden"
+      style={{ willChange: "transform" }}
     >
       {/* Header */}
       <div className="flex items-center justify-between mb-16 relative">
-        <img src="/assets/Logo2.png" alt="Logo" className="w-14 h-auto sm:w-[74px] object-contain" />
-        <h3 className="text-[#405FFC] text-xl sm:text-2xl md:text-[34px] font-[600] tracking-[0.2em] sm:tracking-[0.3em] absolute left-1/2 transform -translate-x-1/2">
+        <img
+          src="/assets/Logo2.png"
+          alt="Logo"
+          className="w-14 h-auto sm:w-[74px] object-contain"
+        />
+        <h3 className="text-[#405FFC] text-xl sm:text-2xl md:text-[34px] font-[400] tracking-[0.2em] absolute left-1/2 transform -translate-x-1/2 uppercase">
           Newsroom
         </h3>
       </div>
 
       <div className="flex flex-col lg:flex-row items-center lg:items-start gap-16 flex-1">
-        {/* Left Year Section */}
+        {/* Left Year Section with wheel rotation effect */}
         <div className="relative w-full lg:w-1/2 flex justify-center items-center">
-          {/* Previous Year Faded */}
-          {prevYear && (
-            <p
-              ref={prevYearRef}
-              className="absolute -top-28 left-[23.25rem] text-[80px] sm:text-[120px] md:text-[140px] font-extrabold text-[#2A2C6A]/40 z-0 scale-90"
-            >
-              {String(prevYear).slice(2)}
-            </p>
-          )}
+          <div
+            ref={yearContainerRef}
+            className="relative flex items-center"
+            style={{ willChange: "transform" }}
+          >
+            {/* "20" - Outside the parallelogram */}
+            <div className="text-[120px] sm:text-[140px] md:text-[160px] font-extrabold text-white leading-none mr-[-30px] z-10">
+              20
+            </div>
 
-          {/* Main "20" */}
-          <div className="text-[70px] sm:text-[90px] md:text-[115px] font-extrabold text-[#3B5BFF] transform -skew-x-12">
-            20
+            {/* Red Parallelogram Background with wheel effect for last 2 digits */}
+            <div
+              className="relative bg-[#405FFC] transform -skew-x-12 shadow-2xl overflow-hidden"
+              style={{
+                width: "255px",
+                height: "280px",
+              }}
+            >
+              {/* Digit Wheel Container */}
+              <div className="absolute inset-0 flex items-center justify-center transform skew-x-12">
+                <div className="relative overflow-hidden h-[200px] flex items-center">
+                  {/* Previous Year Digit - Faded and Behind */}
+                  {activeIndex > 0 && (
+                    <div className="absolute text-[120px] sm:text-[140px] md:text-[160px] font-extrabold text-white/30 leading-none transform translate-y-[-120px] z-0">
+                      {String(years[activeIndex - 1]).slice(2)}
+                    </div>
+                  )}
+
+                  {/* Current Year Digit */}
+                  <div
+                    ref={digitWheelRef}
+                    className="text-[120px] sm:text-[140px] md:text-[160px] font-extrabold text-white leading-none z-10"
+                    style={{ willChange: "transform" }}
+                  >
+                    {String(years[activeIndex]).slice(2)}
+                  </div>
+
+                  {/* Next Year Digit - Faded and Behind */}
+                  {activeIndex < years.length - 1 && (
+                    <div className="absolute text-[120px] sm:text-[140px] md:text-[160px] font-extrabold text-white/30 leading-none transform translate-y-[120px] z-0">
+                      {String(years[activeIndex + 1]).slice(2)}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
-
-          {/* Active Year */}
-          <div className="bg-[#3B5BFF] px-6 sm:px-10 py-4 sm:py-6 shadow-lg transform -skew-x-12 relative z-10 overflow-hidden">
-            <h2
-              ref={yearBoxRef}
-              className="text-[70px] sm:text-[90px] md:text-[115px] font-extrabold text-white transform skew-x-12"
-            >
-              {String(centerYear).slice(2)}
-            </h2>
-          </div>
-
-          {/* Next Year Faded */}
-          {nextYear && (
-            <p
-              ref={nextYearRef}
-              className="absolute bottom-[-6rem] left-[21.25rem] text-[80px] sm:text-[120px] md:text-[140px] font-extrabold text-[#2A2C6A]/40 z-0 scale-90"
-            >
-              {String(nextYear).slice(2)}
-            </p>
-          )}
         </div>
 
         {/* Right Content Section */}
-        <div ref={contentRef} className="w-full lg:w-1/2 flex flex-col gap-10">
-          {newsData[centerYear]?.map((item, idx) => (
-            <div key={idx} className="border-b border-gray-700 pb-4 sm:pb-6">
-              <h4 className="text-base sm:text-lg md:text-xl text-white mb-2">{item.title}</h4>
-              <div className="flex flex-wrap gap-4 sm:gap-6 text-sm text-[#405FFC]">
-                <span>{item.location}</span>
-                <span>{item.date}</span>
+        <div ref={contentRef} className="w-full lg:w-1/2 flex flex-col gap-8">
+          {currentYearData?.map((item, idx) => (
+            <div
+              key={`${years[activeIndex]}-${idx}`}
+              ref={(el) => (contentItemsRef.current[idx] = el)}
+              className="border-b border-gray-700 pb-6 transform transition-all duration-300 hover:border-[#405FFC] cursor-pointer group"
+              style={{ willChange: "transform, opacity" }}
+            >
+              <h4 className="text-lg sm:text-xl md:text-2xl text-white mb-4 font-medium leading-relaxed group-hover:text-[#405FFC] transition-colors duration-300">
+                {item.title}
+              </h4>
+              <div className="flex flex-wrap gap-6 text-sm">
+                <span className="text-[#405FFC] font-semibold">
+                  {item.location}
+                </span>
+                <span className="text-[#405FFC]">{item.date}</span>
               </div>
             </div>
           ))}

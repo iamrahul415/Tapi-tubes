@@ -9,7 +9,7 @@ const pressReleases = [
         title:
           "Metal Fairs 2024 Showcases Strong Industry Growth with Impressive Turnout, Highlighting Positive Trends and Developments",
         description:
-          "Mumbai, December 2024: The four renowned metal trade fairs—wire India, Tube India, METEC India, and India Essen Welding & Cutting - successfully concluded at the Bombay Exhibition Center from 27-29 November, after a two-year hiatus. The enthusiasm displayed by industry participants was an encouraging sign of the sector’s recovery and growth. Organized by Messe Düsseldorf India, these fairs have long been a prominent gathering for professionals from the wire, cable, tube, metallurgical processes, cutting, and welding industries in both India and internationally. This year, the event garnered a significant response, with 21,086 attendees visiting to witness the latest innovations and trends in the metal industry. The high turnout was a testament to the enduring importance of these fairs in facilitating business connections, showcasing technological advancements, and highlighting industry trends.",
+          "Mumbai, December 2024: The four renowned metal trade fairs—wire India, Tube India, METEC India, and India Essen Welding & Cutting - successfully concluded at the Bombay Exhibition Center from 27-29 November, after a two-year hiatus. The enthusiasm displayed by industry participants was an encouraging sign of the sector’s recovery and growth. Organized by Messe Düsseldorf India, these fairs have long been a prominent gathering for professionals from the wire, cable, tube, metallurgical processes, cutting, and welding industries in both India and internationally. This year, the event garnered a significant response, with 21,086 attendees visiting to witness the latest innovations and trends in the metal industry. The high turnout was a testament to the enduring importance of these fairs in facilitating business connections, showcasing technological advancements, and highlighting industry trends.",
         img: "/assets/Tapi1Img.png",
       },
     ],
@@ -22,7 +22,7 @@ const pressReleases = [
         title:
           "Metal Fairs 2024 Showcases Strong Industry Growth with Impressive Turnout, Highlighting Positive Trends and Developments",
         description:
-          "Mumbai, December 2024: The four renowned metal trade fairs—wire India, Tube India, METEC India, and India Essen Welding & Cutting - successfully concluded at the Bombay Exhibition Center from 27-29 November, after a two-year hiatus. The enthusiasm displayed by industry participants was an encouraging sign of the sector’s recovery and growth. Organized by Messe Düsseldorf India, these fairs have long been a prominent gathering for professionals from the wire, cable, tube, metallurgical processes, cutting, and welding industries in both India and internationally. This year, the event garnered a significant response, with 21,086 attendees visiting to witness the latest innovations and trends in the metal industry. The high turnout was a testament to the enduring importance of these fairs in facilitating business connections, showcasing technological advancements, and highlighting industry trends.",
+          "Mumbai, December 2024: The four renowned metal trade fairs—wire India, Tube India, METEC India, and India Essen Welding & Cutting - successfully concluded at the Bombay Exhibition Center from 27-29 November, after a two-year hiatus. The enthusiasm displayed by industry participants was an encouraging sign of the sector’s recovery and growth. Organized by Messe Düsseldorf India, these fairs have long been a prominent gathering for professionals from the wire, cable, tube, metallurgical processes, cutting, and welding industries in both India and internationally. This year, the event garnered a significant response, with 21,086 attendees visiting to witness the latest innovations and trends in the metal industry. The high turnout was a testament to the enduring importance of these fairs in facilitating business connections, showcasing technological advancements, and highlighting industry trends.",
         img: "/assets/Tapi2Img.png",
       },
     ],
@@ -35,7 +35,7 @@ const pressReleases = [
         title:
           "Metal Fairs 2024 Showcases Strong Industry Growth with Impressive Turnout, Highlighting Positive Trends and Developments",
         description:
-          "Mumbai, December 2024: The four renowned metal trade fairs—wire India, Tube India, METEC India, and India Essen Welding & Cutting - successfully concluded at the Bombay Exhibition Center from 27-29 November, after a two-year hiatus. The enthusiasm displayed by industry participants was an encouraging sign of the sector’s recovery and growth. Organized by Messe Düsseldorf India, these fairs have long been a prominent gathering for professionals from the wire, cable, tube, metallurgical processes, cutting, and welding industries in both India and internationally. This year, the event garnered a significant response, with 21,086 attendees visiting to witness the latest innovations and trends in the metal industry. The high turnout was a testament to the enduring importance of these fairs in facilitating business connections, showcasing technological advancements, and highlighting industry trends.",
+          "Mumbai, December 2024: The four renowned metal trade fairs—wire India, Tube India, METEC India, and India Essen Welding & Cutting - successfully concluded at the Bombay Exhibition Center from 27-29 November, after a two-year hiatus. The enthusiasm displayed by industry participants was an encouraging sign of the sector’s recovery and growth. Organized by Messe Düsseldorf India, these fairs have long been a prominent gathering for professionals from the wire, cable, tube, metallurgical processes, cutting, and welding industries in both India and internationally. This year, the event garnered a significant response, with 21,086 attendees visiting to witness the latest innovations and trends in the metal industry. The high turnout was a testament to the enduring importance of these fairs in facilitating business connections, showcasing technological advancements, and highlighting industry trends.",
         img: "/assets/Tapi3Img.png",
       },
     ],
@@ -48,7 +48,7 @@ const pressReleases = [
         title:
           "Metal Fairs 2024 Showcases Strong Industry Growth with Impressive Turnout, Highlighting Positive Trends and Developments",
         description:
-          "Mumbai, December 2024: The four renowned metal trade fairs—wire India, Tube India, METEC India, and India Essen Welding & Cutting - successfully concluded at the Bombay Exhibition Center from 27-29 November, after a two-year hiatus. The enthusiasm displayed by industry participants was an encouraging sign of the sector’s recovery and growth. Organized by Messe Düsseldorf India, these fairs have long been a prominent gathering for professionals from the wire, cable, tube, metallurgical processes, cutting, and welding industries in both India and internationally. This year, the event garnered a significant response, with 21,086 attendees visiting to witness the latest innovations and trends in the metal industry. The high turnout was a testament to the enduring importance of these fairs in facilitating business connections, showcasing technological advancements, and highlighting industry trends.",
+          "Mumbai, December 2024: The four renowned metal trade fairs—wire India, Tube India, METEC India, and India Essen Welding & Cutting - successfully concluded at the Bombay Exhibition Center from 27-29 November, after a two-year hiatus. The enthusiasm displayed by industry participants was an encouraging sign of the sector’s recovery and growth. Organized by Messe Düsseldorf India, these fairs have long been a prominent gathering for professionals from the wire, cable, tube, metallurgical processes, cutting, and welding industries in both India and internationally. This year, the event garnered a significant response, with 21,086 attendees visiting to witness the latest innovations and trends in the metal industry. The high turnout was a testament to the enduring importance of these fairs in facilitating business connections, showcasing technological advancements, and highlighting industry trends.",
         img: "/assets/Tapi4Img.png",
       },
     ],
@@ -80,13 +80,13 @@ const PressReleaseMain = () => {
                       <p className="text-blue-400 font-medium">
                         {yearBlock.items[0].date}
                       </p>
-                      <p className="text-sm md:text-base leading-relaxed text-gray-300">
+                      <p className="text-sm md:text-base leading-relaxed text-gray-300 hover:text-blue-400 cursor-pointer transition-colors duration-300">
                         {yearBlock.items[0].title}
                       </p>
                       <img
                         src={yearBlock.items[0].img}
                         alt="Press release"
-                        className="w-full bg-[#565050b4] cursor-pointer"
+                        className="w-full bg-[#565050b4] cursor-pointer transform transition-transform duration-300 hover:scale-105"
                         onClick={() => openOverlay(yearBlock.items[0])}
                       />
                     </div>
@@ -109,13 +109,13 @@ const PressReleaseMain = () => {
                       <p className="text-blue-400 font-medium">
                         {yearBlock.items[0].date}
                       </p>
-                      <p className="text-sm md:text-base leading-relaxed text-gray-300">
+                      <p className="text-sm md:text-base leading-relaxed text-gray-300 hover:text-blue-400 cursor-pointer transition-colors duration-300">
                         {yearBlock.items[0].title}
                       </p>
                       <img
                         src={yearBlock.items[0].img}
                         alt="Press release"
-                        className="w-full bg-[#565050b4] cursor-pointer"
+                        className="w-full bg-[#565050b4] cursor-pointer transform transition-transform duration-300 hover:scale-105"
                         onClick={() => openOverlay(yearBlock.items[0])}
                       />
                     </div>
@@ -157,10 +157,8 @@ const PressReleaseMain = () => {
                 <p className="text-[#dfce7c] mb-4">{overlay.item.date}</p>
 
                 {/* Scrollable description */}
-                {/* Scrollable description */}
                 <div className="overflow-y-auto text-[#ffffff] flex-1 relative custom-scroll">
                   <p className="mb-4">{overlay.item.description}</p>
-                  {/* Add more content if needed to enable scrolling */}
                 </div>
               </div>
             </div>
