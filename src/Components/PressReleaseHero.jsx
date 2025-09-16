@@ -1,4 +1,4 @@
-const PressreleaseHero = () => {
+const PressReleaseHero = () => {
   return (
     <section className="relative w-full h-[75vh] sm:h-[80vh] md:h-[90vh] flex items-center justify-start overflow-hidden">
       {/* Background Image */}
@@ -21,4 +21,4 @@ const PressreleaseHero = () => {
   );
 };
 
-export default PressreleaseHero;
+export default PressReleaseHero;

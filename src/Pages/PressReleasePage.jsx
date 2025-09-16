@@ -1,10 +1,10 @@
-import PressreleaseHero from "@/Components/PressreleaseHero";
+import PressReleaseHero from "@/Components/PressReleaseHero";
 import PressReleaseMain from "@/Components/PressReleaseMain";
 
 function PressReleasePage() {
   return (
     <div className="w-full min-h-screen text-white">
-      <PressreleaseHero />
+      <PressReleaseHero />
       <PressReleaseMain />
     </div>
   );
