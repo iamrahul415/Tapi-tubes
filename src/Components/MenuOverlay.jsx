@@ -47,7 +47,7 @@ function MenuOverlay({ open, onClose }) {
       <div className="absolute top-6 left-6">
         <Link to="/" onClick={onClose}>
           <img
-            src="../assets/Logo.png"
+            src="@/assets/Logo.png"
             alt="companyLogo"
             width={81}
             height={48}

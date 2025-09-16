@@ -40,7 +40,7 @@ function Navbar() {
       <Link to="/" className="cursor-pointer">
         <img
           className="logo transition-transform duration-300 hover:scale-105"
-          src="../assets/Logo.png"
+          src="@/assets/Logo.png"
           alt="companyLogo"
           width={81}
           height={48}

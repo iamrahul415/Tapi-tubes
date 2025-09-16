@@ -1,6 +1,6 @@
-import JobHero from "../Components/CareerHero";
-import Opportunity from "../Components/Opportunity";
-import JoinUs from "../Components/JoinUs";
+import JobHero from "@/Components/CareerHero";
+import Opportunity from "@/Components/Opportunity";
+import JoinUs from "@/Components/JoinUs";
 
 function CareerPage() {
   return (

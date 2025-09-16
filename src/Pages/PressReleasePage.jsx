@@ -1,7 +1,5 @@
-import Navbar from "../Components/Navbar";
-import PressreleaseHero from "../Components/PressreleaseHero";
-import PressReleaseMain from "../Components/PressReleaseMain";
-import Footer from "../Components/Footer";
+import PressreleaseHero from "@/Components/PressreleaseHero";
+import PressReleaseMain from "@/Components/PressReleaseMain";
 
 function PressReleasePage() {
   return (

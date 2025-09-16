@@ -1,7 +1,5 @@
-import Navbar from "../Components/Navbar";
-import PeopleHero from "../Components/PeopleHero";
-import PeopleMain from "../Components/PeopleMain";
-import Footer from "../Components/Footer";
+import PeopleHero from "@/Components/PeopleHero";
+import PeopleMain from "@/Components/PeopleMain";
 
 function PeoplePage() {
   return (

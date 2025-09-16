@@ -1,8 +1,8 @@
-import AboutUs from "../Components/AboutUs";
-import HeroSection from "../Components/HeroSection";
-import Portfolio from "../Components/Portfolio";
-import Newsroom from "../Components/Newroom";
-import ContactUs from "../Components/ContactUs";
+import AboutUs from "@/Components/AboutUs";
+import HeroSection from "@/Components/HeroSection";
+import Portfolio from "@/Components/Portfolio";
+import Newsroom from "@/Components/Newroom";
+import ContactUs from "@/Components/ContactUs";
 
 const HomePage = () => {
   return (
