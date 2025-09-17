@@ -47,6 +47,7 @@ function App() {
         <Route path="/CareerPage" element={<CareerPage />} />
         <Route path="/PeoplePage" element={<PeoplePage />} />
         <Route path="/PressReleasePage" element={<PressReleasePage />} />
+        <Route path="/AboutUsDetail" element={<AboutUsDetail/>} />
       </Routes>
       <Footer />
     </BrowserRouter>

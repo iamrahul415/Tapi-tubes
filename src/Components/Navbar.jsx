@@ -59,12 +59,12 @@ function Navbar() {
         >
           Partners
         </Link>
-        <a
-          href="#About-us"
+        <Link
+          to="/AboutUsDetail"
           className="uppercase cursor-pointer hover:text-[#405FFC] transition"
         >
           About Us
-        </a>
+        </Link>
         <Link
           to="/products"
           className="uppercase cursor-pointer hover:text-[#405FFC] transition"

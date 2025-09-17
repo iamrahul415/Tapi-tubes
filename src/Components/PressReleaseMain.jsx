@@ -65,7 +65,7 @@ const PressReleaseMain = () => {
     <section className="relative w-full bg-black text-white px-6 md:px-16">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
-          {/* Middle timeline line */}
+          {/* Middle timeline line for desktop */}
           <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-[2px] bg-gray-600 -translate-x-1/2"></div>
 
           {pressReleases.map((yearBlock, index) => {
@@ -76,26 +76,36 @@ const PressReleaseMain = () => {
                 {/* Left column */}
                 <div className={`flex justify-end ${isOdd ? "mt-0" : "mt-16"}`}>
                   {isOdd && (
-                    <div className="bg-black p-6 space-y-4 w-full md:max-w-md">
-                      <p className="text-blue-400 font-medium">
-                        {yearBlock.items[0].date}
-                      </p>
-                      <p className="text-sm md:text-base leading-relaxed text-gray-300 hover:text-blue-400 cursor-pointer transition-colors duration-300">
-                        {yearBlock.items[0].title}
-                      </p>
-                      <img
-                        src={yearBlock.items[0].img}
-                        alt="Press release"
-                        className="w-full bg-[#565050b4] cursor-pointer transform transition-transform duration-300 hover:scale-105"
-                        onClick={() => openOverlay(yearBlock.items[0])}
-                      />
+                    <div className="w-full md:max-w-md">
+                      {/* Year (mobile only, centered) */}
+                      <div className="flex justify-center mb-4 md:hidden">
+                        <span className="bg-black px-3 py-1 font-bold text-xl">
+                          {yearBlock.year}
+                        </span>
+                      </div>
+
+                      {/* Card */}
+                      <div className="bg-black p-6 space-y-4">
+                        <p className="text-blue-400 font-medium">
+                          {yearBlock.items[0].date}
+                        </p>
+                        <p className="text-sm md:text-base leading-relaxed text-gray-300 hover:text-blue-400 cursor-pointer transition-colors duration-300">
+                          {yearBlock.items[0].title}
+                        </p>
+                        <img
+                          src={yearBlock.items[0].img}
+                          alt="Press release"
+                          className="w-full bg-[#565050b4] cursor-pointer transform transition-transform duration-300 hover:scale-105"
+                          onClick={() => openOverlay(yearBlock.items[0])}
+                        />
+                      </div>
                     </div>
                   )}
                 </div>
 
-                {/* Middle column (year) */}
-                <div className="flex items-start justify-center relative">
-                  <span className="bg-black px-3 py-1 font-bold text-xl md:text-3xl">
+                {/* Middle column (year) – desktop only */}
+                <div className="hidden md:flex items-start justify-center relative">
+                  <span className="bg-black px-3 py-1 font-bold text-3xl">
                     {yearBlock.year}
                   </span>
                 </div>
@@ -105,19 +115,29 @@ const PressReleaseMain = () => {
                   className={`flex justify-start ${!isOdd ? "mt-0" : "mt-16"}`}
                 >
                   {!isOdd && (
-                    <div className="bg-black p-6 space-y-4 w-full md:max-w-md">
-                      <p className="text-blue-400 font-medium">
-                        {yearBlock.items[0].date}
-                      </p>
-                      <p className="text-sm md:text-base leading-relaxed text-gray-300 hover:text-blue-400 cursor-pointer transition-colors duration-300">
-                        {yearBlock.items[0].title}
-                      </p>
-                      <img
-                        src={yearBlock.items[0].img}
-                        alt="Press release"
-                        className="w-full bg-[#565050b4] cursor-pointer transform transition-transform duration-300 hover:scale-105"
-                        onClick={() => openOverlay(yearBlock.items[0])}
-                      />
+                    <div className="w-full md:max-w-md">
+                      {/* Year (mobile only, centered) */}
+                      <div className="flex justify-center mb-4 md:hidden">
+                        <span className="bg-black px-3 py-1 font-bold text-xl">
+                          {yearBlock.year}
+                        </span>
+                      </div>
+
+                      {/* Card */}
+                      <div className="bg-black p-6 space-y-4">
+                        <p className="text-blue-400 font-medium">
+                          {yearBlock.items[0].date}
+                        </p>
+                        <p className="text-sm md:text-base leading-relaxed text-gray-300 hover:text-blue-400 cursor-pointer transition-colors duration-300">
+                          {yearBlock.items[0].title}
+                        </p>
+                        <img
+                          src={yearBlock.items[0].img}
+                          alt="Press release"
+                          className="w-full bg-[#565050b4] cursor-pointer transform transition-transform duration-300 hover:scale-105"
+                          onClick={() => openOverlay(yearBlock.items[0])}
+                        />
+                      </div>
                     </div>
                   )}
                 </div>
@@ -131,6 +151,14 @@ const PressReleaseMain = () => {
       {overlay.open && overlay.item && (
         <div className="fixed inset-0 bg-transparent flex items-center justify-center z-50 p-4">
           <div className="bg-blue-900/90 max-w-6xl w-full flex flex-col md:flex-row relative rounded-lg overflow-hidden shadow-lg">
+            {/* ✅ Close button now relative to whole overlay box */}
+            <button
+              onClick={closeOverlay}
+              className="absolute top-4 right-4 text-[#dfce7c] px-4 py-2 font-normal z-10"
+            >
+              CLOSE
+            </button>
+
             {/* Left side: Image, centered vertically */}
             <div className="md:w-1/2 w-full flex items-center justify-center p-4">
               <img
@@ -142,14 +170,6 @@ const PressReleaseMain = () => {
 
             {/* Right side: Details */}
             <div className="md:w-1/2 w-full p-10 relative text-white flex flex-col justify-start">
-              {/* Close button at top-right */}
-              <button
-                onClick={closeOverlay}
-                className="absolute top-4 right-4 text-[#dfce7c] px-4 py-2 font-normal"
-              >
-                CLOSE
-              </button>
-
               <div className="mt-8 md:mt-0 flex flex-col h-[60vh] md:h-[70vh] relative">
                 <h2 className="text-2xl md:text-4xl font-semibold font-poppins mb-2">
                   {overlay.item.title}
