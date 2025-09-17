@@ -7,11 +7,10 @@ gsap.registerPlugin(ScrollTrigger);
 
 const Newsroom = () => {
   const years = [2019, 2020, 2021, 2022, 2023, 2024, 2025];
-  const [activeIndex, setActiveIndex] = useState(0); // Start with 2019
+  const [activeIndex, setActiveIndex] = useState(6); // Start with 2025 (latest)
   const sectionRef = useRef(null);
-  const twentyRef = useRef(null);
-  const parallelogramRef = useRef(null);
-  const yearDigitsRef = useRef(null);
+  const yearRef = useRef(null);
+  const shapeRef = useRef(null);
   const contentRef = useRef(null);
   const contentItemsRef = useRef([]);
   const isAnimating = useRef(false);
@@ -19,114 +18,114 @@ const Newsroom = () => {
   const newsData = {
     2019: [
       {
-        title: "Tapi Tubes establishes advanced manufacturing capabilities",
+        title: "Tapi Tubes establishes advanced manufacturing capabilities with state-of-the-art technology",
         location: "Mumbai",
         date: "December 2019",
       },
       {
-        title: "Strategic expansion into new market segments",
+        title: "Strategic expansion into new market segments across India",
         location: "Delhi",
         date: "September 2019",
       },
     ],
     2020: [
       {
-        title: "Tapi Tubes establishes state-of-the-art manufacturing unit",
+        title: "Tapi Tubes establishes state-of-the-art manufacturing unit with advanced ERW technology",
         location: "Mumbai",
         date: "February 2020",
       },
       {
-        title: "Strategic partnership with leading infrastructure companies announced",
+        title: "Strategic partnership with leading infrastructure companies announced for nationwide expansion",
         location: "Delhi",
         date: "June 2020",
       },
       {
-        title: "Launch of eco-friendly steel pipe production initiative",
+        title: "Launch of eco-friendly steel pipe production initiative for sustainable manufacturing",
         location: "Chennai",
         date: "October 2020",
       },
     ],
     2021: [
       {
-        title: "Tapi Tubes expands production capacity with new facilities",
+        title: "Tapi Tubes expands production capacity with new facilities to meet growing demand",
         location: "Pune",
         date: "March 2021",
       },
       {
-        title: "Breakthrough in innovative tube technology introduced",
+        title: "Breakthrough in innovative tube technology introduced for enhanced structural integrity",
         location: "Mumbai",
         date: "July 2021",
       },
       {
-        title: "Awarded recognition for environmental sustainability practices",
+        title: "Awarded recognition for environmental sustainability practices in steel manufacturing",
         location: "Bangalore",
         date: "November 2021",
       },
     ],
     2022: [
       {
-        title: "Tapi Tubes introduces advanced grades of steel tubes",
+        title: "Tapi Tubes introduces advanced grades of steel tubes for specialized industrial applications",
         location: "Delhi",
         date: "January 2022",
       },
       {
-        title: "Partnership with renewable energy projects for green steel solutions",
+        title: "Partnership with renewable energy projects for green steel solutions and sustainable development",
         location: "Chennai",
         date: "May 2022",
       },
       {
-        title: "Completion of digital transformation across manufacturing units",
+        title: "Completion of digital transformation across manufacturing units for enhanced efficiency",
         location: "Mumbai",
         date: "September 2022",
       },
     ],
     2023: [
       {
-        title: "New ERW pipe plant established in Chennai",
+        title: "New ERW pipe plant established in Chennai with cutting-edge manufacturing technology",
         location: "Chennai",
         date: "March 2023",
       },
       {
-        title: "Tapi Tubes wins national award for innovation in steel solutions",
+        title: "Tapi Tubes wins national award for innovation in steel solutions and engineering excellence",
         location: "Mumbai",
         date: "June 2023",
       },
       {
-        title: "Expansion in production capacity for structural tubes",
+        title: "Expansion in production capacity for structural tubes to serve infrastructure projects",
         location: "Delhi",
         date: "August 2023",
       },
     ],
     2024: [
       {
-        title: "Tapi Tubes launches Magnelis® – unique import substitute to power India's renewable energy transition",
+        title: "Tapi Tubes launches advanced ERW technology – unique import substitute to power India's infrastructure development",
         location: "Mumbai",
         date: "September 2024",
       },
       {
-        title: "Tapi Tubes launches Optigal®, world-class product with longest warranty",
+        title: "Tapi Tubes launches premium grade tubes, world-class product with enhanced durability and longest warranty",
         location: "Mumbai",
         date: "August 2024",
       },
       {
-        title: "Tapi Tubes renews partnership with Protean to advance 'Beti Padhao' scholarship initiative",
+        title: "Tapi Tubes expands partnership network to advance sustainable steel manufacturing initiatives",
         location: "Mumbai",
         date: "March 2024",
       },
     ],
     2025: [
       {
-        title: "Tapi Tubes unveils next-generation steel tube solutions",
+        title: "Tapi Tubes unveils next-generation steel tube solutions for modern infrastructure challenges",
         location: "Delhi",
         date: "February 2025",
       },
       {
-        title: "Achieves major milestone towards carbon-neutral steel production",
+        title: "Achieves major milestone towards carbon-neutral steel production with innovative green technology",
         location: "Mumbai",
         date: "June 2025",
       },
       {
-        title: "Tapi Tubes announces global expansion through strategic partnerships",
+        title: "Tapi Tubes announces global expansion through strategic partnerships and international collaborations",
         location: "Bangalore",
         date: "October 2025",
       },
@@ -145,19 +144,31 @@ const Newsroom = () => {
       },
     });
 
-    // Animate the year change with a smooth transition
-    tl.to(yearDigitsRef.current, {
-      scale: 0.8,
-      opacity: 0,
+    // Animate year change
+    tl.to(yearRef.current, {
+      scale: 0.9,
+      opacity: 0.7,
       duration: 0.3,
       ease: "power2.in",
     })
-    .set(yearDigitsRef.current, {
-      textContent: String(years[newIndex]).slice(2),
+    .set(yearRef.current, {
+      textContent: years[newIndex],
     })
-    .to(yearDigitsRef.current, {
+    .to(yearRef.current, {
       scale: 1,
       opacity: 1,
+      duration: 0.4,
+      ease: "back.out(1.7)",
+    });
+
+    // Animate shape
+    tl.to(shapeRef.current, {
+      scaleX: 0.8,
+      duration: 0.3,
+      ease: "power2.in",
+    }, 0)
+    .to(shapeRef.current, {
+      scaleX: 1,
       duration: 0.4,
       ease: "back.out(1.7)",
     });
@@ -167,8 +178,8 @@ const Newsroom = () => {
       contentItemsRef.current.filter(Boolean),
       {
         opacity: 0,
-        y: 30,
-        stagger: 0.03,
+        x: 30,
+        stagger: 0.05,
         duration: 0.3,
         ease: "power2.in",
       },
@@ -177,9 +188,9 @@ const Newsroom = () => {
       contentItemsRef.current.filter(Boolean),
       {
         opacity: 1,
-        y: 0,
-        stagger: 0.05,
-        duration: 0.4,
+        x: 0,
+        stagger: 0.08,
+        duration: 0.5,
         ease: "power2.out",
       },
       0.4
@@ -188,14 +199,14 @@ const Newsroom = () => {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // ScrollTrigger
+      // ScrollTrigger for year changes
       ScrollTrigger.create({
         trigger: sectionRef.current,
         start: "top top",
         end: () => `+=${window.innerHeight * years.length}`,
         pin: true,
         anticipatePin: 1,
-        scrub: 0.3,
+        scrub: 0.5,
         onUpdate: (self) => {
           if (isAnimating.current) return;
 
@@ -203,7 +214,8 @@ const Newsroom = () => {
           const segmentSize = 1 / years.length;
           let newIndex = Math.floor(progress / segmentSize);
 
-          newIndex = Math.max(0, Math.min(newIndex, years.length - 1));
+          // Reverse the index to start from latest year
+          newIndex = years.length - 1 - Math.max(0, Math.min(newIndex, years.length - 1));
 
           if (newIndex !== activeIndex) {
             animateToYear(newIndex);
@@ -216,21 +228,21 @@ const Newsroom = () => {
       
       entranceTL
         .fromTo(
-          twentyRef.current,
-          { x: -150, opacity: 0, scale: 0.9 },
-          { x: 0, opacity: 1, scale: 1, duration: 1.5, ease: "power3.out" }
+          yearRef.current,
+          { scale: 0.8, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 1.2, ease: "power3.out" }
         )
         .fromTo(
-          parallelogramRef.current,
-          { x: 200, opacity: 0, rotationY: 15 },
-          { x: 0, opacity: 1, rotationY: 0, duration: 1.5, ease: "power3.out" },
-          "-=1.2"
+          shapeRef.current,
+          { scaleX: 0, transformOrigin: "left center" },
+          { scaleX: 1, duration: 1.5, ease: "power3.out" },
+          "-=0.8"
         )
         .fromTo(
           contentRef.current,
-          { x: 100, opacity: 0 },
-          { x: 0, opacity: 1, duration: 1.2, ease: "power3.out" },
-          "-=1"
+          { x: 50, opacity: 0 },
+          { x: 0, opacity: 1, duration: 1, ease: "power3.out" },
+          "-=0.5"
         );
 
     }, sectionRef);
@@ -244,12 +256,12 @@ const Newsroom = () => {
     if (items.length > 0 && !isAnimating.current) {
       gsap.fromTo(
         items,
-        { y: 20, opacity: 0 },
+        { x: 20, opacity: 0 },
         {
-          y: 0,
+          x: 0,
           opacity: 1,
           duration: 0.6,
-          stagger: 0.08,
+          stagger: 0.1,
           ease: "power2.out",
           delay: 0.1,
         }
@@ -263,103 +275,91 @@ const Newsroom = () => {
   return (
     <section
       ref={sectionRef}
-      className="relative w-full h-screen bg-gray-900 text-white overflow-hidden"
+      className="relative w-full h-screen bg-black text-white overflow-hidden"
     >
       {/* Header */}
-      <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-20">
-        <h1 className="text-2xl md:text-4xl font-light tracking-[0.3em] text-[#405FFC] uppercase">
+      <div className="absolute top-12 left-1/2 transform -translate-x-1/2 z-20">
+        <h1 className="text-2xl md:text-3xl font-light tracking-[0.4em] text-gray-400 uppercase">
           Newsroom
         </h1>
       </div>
 
-      <div className="relative z-10 flex h-full items-center">
-        {/* Left side - Large "20" */}
-        <div className="flex-none flex items-center justify-end pr-8">
-          <span 
-            ref={twentyRef}
-            className="text-[12rem] md:text-[16rem] lg:text-[20rem] font-bold text-[#405FFC] leading-none select-none"
-          >
-            20
-          </span>
-        </div>
-
-        {/* Center - Parallelogram with full year */}
-        <div className="flex-none relative">
-          <div
-            ref={parallelogramRef}
-            className="relative bg-[#405FFC] overflow-hidden"
-            style={{
-              width: "400px",
-              height: "600px",
-              transform: "skewX(-15deg)",
-            }}
-          >
-            {/* Year display - showing full year like "21" */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div
-                ref={yearDigitsRef}
-                className="text-[8rem] md:text-[12rem] lg:text-[16rem] font-bold text-white leading-none"
+      <div className="relative z-10 flex h-full items-center justify-center">
+        <div className="w-full max-w-7xl mx-auto px-8 flex items-center">
+          
+          {/* Left side - Year with geometric shape */}
+          <div className="flex-none relative mr-16">
+            {/* Geometric shape background */}
+            <div
+              ref={shapeRef}
+              className="absolute inset-0 bg-[#405FFC] transform -skew-x-12"
+              style={{
+                width: "400px",
+                height: "300px",
+                left: "-50px",
+                top: "50%",
+                transform: "translateY(-50%) skewX(-15deg)",
+              }}
+            />
+            
+            {/* Year text */}
+            <div className="relative z-10 flex items-center justify-center" style={{ width: "300px", height: "400px" }}>
+              <span 
+                ref={yearRef}
+                className="text-[8rem] md:text-[10rem] lg:text-[12rem] font-bold text-white leading-none select-none"
                 style={{ 
-                  transform: "skewX(15deg)",
-                  textShadow: "0 4px 30px rgba(0,0,0,0.5)"
+                  textShadow: "0 4px 30px rgba(0,0,0,0.3)"
                 }}
               >
-                {String(activeYear).slice(2)}
-              </div>
+                {activeYear}
+              </span>
             </div>
           </div>
-        </div>
 
-        {/* Right side - Content */}
-        <div
-          ref={contentRef}
-          className="flex-1 pl-12 pr-8 max-w-3xl"
-        >
-          <div className="space-y-8">
-            {currentYearData?.map((item, idx) => (
-              <div
-                key={`${activeYear}-${idx}`}
-                ref={(el) => (contentItemsRef.current[idx] = el)}
-                className="group pb-6 cursor-pointer transition-all duration-300"
-              >
-                <h3 className="text-xl md:text-2xl lg:text-3xl font-medium text-white mb-4 leading-tight group-hover:text-[#405FFC] transition-colors duration-300">
-                  {item.title}
-                </h3>
-                <div className="flex flex-wrap gap-6 text-base">
-                  <span className="text-[#405FFC] font-medium">
-                    {item.location}
-                  </span>
-                  <span className="text-[#405FFC] font-medium">
-                    {item.date}
-                  </span>
+          {/* Right side - Content */}
+          <div
+            ref={contentRef}
+            className="flex-1 max-w-3xl"
+          >
+            <div className="space-y-12">
+              {currentYearData?.map((item, idx) => (
+                <div
+                  key={`${activeYear}-${idx}`}
+                  ref={(el) => (contentItemsRef.current[idx] = el)}
+                  className="group cursor-pointer transition-all duration-300"
+                >
+                  <h3 className="text-xl md:text-2xl lg:text-3xl font-normal text-white mb-6 leading-relaxed group-hover:text-[#405FFC] transition-colors duration-300">
+                    {item.title}
+                  </h3>
+                  <div className="flex items-center gap-8 text-sm md:text-base">
+                    <span className="text-[#405FFC] font-medium">
+                      {item.location}
+                    </span>
+                    <span className="text-[#405FFC] font-medium">
+                      {item.date}
+                    </span>
+                  </div>
+                  {idx < currentYearData.length - 1 && (
+                    <div className="mt-8 h-px bg-gradient-to-r from-gray-700 via-gray-600 to-transparent"></div>
+                  )}
                 </div>
-                {idx < currentYearData.length - 1 && (
-                  <div className="mt-6 h-px bg-gradient-to-r from-gray-700 via-gray-600 to-transparent"></div>
-                )}
-              </div>
-            ))}
-
-            {/* View All Button */}
-            <div className="mt-10">
-              <button className="group relative overflow-hidden bg-[#405FFC] hover:bg-[#364dc9] text-white px-8 py-4 font-semibold text-lg transition-all duration-300 transform hover:scale-105">
-                <span className="relative z-10">VIEW ALL</span>
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
-              </button>
+              ))}
             </div>
           </div>
         </div>
       </div>
 
-      {/* Progress dots */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-3 z-20">
+      {/* Progress indicators */}
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2 z-20">
         {years.map((year, idx) => (
           <div
             key={year}
-            className={`transition-all duration-300 rounded-full ${
+            className={`transition-all duration-300 rounded-full cursor-pointer ${
               idx === activeIndex 
-                ? 'bg-[#405FFC] w-10 h-4' 
-                : 'bg-gray-600 w-4 h-4 hover:bg-gray-400'
+                ? 'bg-[#405FFC] w-8 h-3' 
+                : 'bg-gray-600 w-3 h-3 hover:bg-gray-400'
             }`}
+            onClick={() => animateToYear(idx)}
           ></div>
         ))}
       </div>
