@@ -1,23 +1,21 @@
 import React, { useEffect, useRef, useState } from "react";
-import gsap from "gsap";
+import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
+// Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger);
 
 const Newsroom = () => {
   const years = [2020, 2021, 2022, 2023, 2024, 2025];
-  const currentYear = new Date().getFullYear();
-  const initialIndex = years.includes(currentYear)
-    ? years.indexOf(currentYear)
-    : years.length - 1; // Default to 2025 if current year not in range
-
-  const [activeIndex, setActiveIndex] = useState(initialIndex);
+  const [activeIndex, setActiveIndex] = useState(0); // Start with first year
   const sectionRef = useRef(null);
-  const yearContainerRef = useRef(null);
+  const twentyRef = useRef(null);
+  const parallelogramRef = useRef(null);
+  const yearDigitsRef = useRef(null);
   const contentRef = useRef(null);
   const contentItemsRef = useRef([]);
-  const digitWheelRef = useRef(null);
   const isAnimating = useRef(false);
+  const scrollDirection = useRef(1);
 
   const newsData = {
     2020: [
@@ -95,19 +93,19 @@ const Newsroom = () => {
     2024: [
       {
         title:
-          "Tapi Tubes launches Magnelis® - unique import substitute to power India’s renewable energy transition",
+          "AM/NS India launches Magnelis® – unique import substitute to power India' renewable energy transition",
         location: "Mumbai",
         date: "September 2024",
       },
       {
         title:
-          "Tapi Tubes introduces Optigal® – world-class product with industry-leading warranty",
+          "AM/NS India launches Optigal®, world-class product with longest warranty",
         location: "Mumbai",
         date: "August 2024",
       },
       {
         title:
-          "Tapi Tubes renews partnership with Protean to advance 'Beti Padhao' scholarship initiative",
+          "ArcelorMittal Nippon Steel India renews partnership with Protean to advance 'Beti Padhao' scholarship initiative",
         location: "Mumbai",
         date: "March 2024",
       },
@@ -133,220 +131,232 @@ const Newsroom = () => {
     ],
   };
 
-  // One-direction navigation function
-  const getNextIndex = (currentIndex) => (currentIndex + 1) % years.length;
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      const totalScrollLength = window.innerHeight * 3; // Increased scroll length for smoother control
-
-      // Initial animation on mount
-      gsap.fromTo(
-        yearContainerRef.current,
-        { opacity: 0 },
-        { opacity: 1, duration: 1.2, ease: "power3.out" }
-      );
-
-      gsap.fromTo(
-        contentRef.current,
-        { x: 100, opacity: 0 },
-        { x: 0, opacity: 1, duration: 1, delay: 0.3, ease: "power3.out" }
-      );
-
-      const scrollTrigger = ScrollTrigger.create({
-        trigger: sectionRef.current,
-        start: "top top",
-        end: () => `+=${totalScrollLength}`,
-        scrub: 0.8,
-        pin: true,
-        anticipatePin: 1,
-        onUpdate: (self) => {
-          if (isAnimating.current) return;
-
-          // Calculate progress and trigger year changes (one direction only)
-          const progress = self.progress;
-          const segmentSize = 1 / years.length;
-          const currentSegment = Math.floor(progress / segmentSize);
-
-          // Only move forward when crossing segment boundaries
-          if (currentSegment !== activeIndex && currentSegment < years.length) {
-            animateYearChange(currentSegment);
-          }
-        },
-      });
-
-      return () => scrollTrigger.kill();
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, [activeIndex, years.length]);
-
-  const animateYearChange = (newIndex) => {
+  const animateToYear = (newIndex) => {
     if (isAnimating.current || newIndex === activeIndex) return;
 
     isAnimating.current = true;
+    const direction = scrollDirection.current;
 
     const tl = gsap.timeline({
-      defaults: { ease: "power3.out" },
       onComplete: () => {
         setActiveIndex(newIndex);
         isAnimating.current = false;
       },
     });
 
-    // Wheel rotation animation for last 2 digits
-    tl.to(digitWheelRef.current, {
-      y: -100, // Move current digit up
+    // Simultaneous animation of year digits and content
+    const slideDistance = direction > 0 ? -60 : 60; // Up for forward, down for backward
+
+    // Year digits animation - slide out then in
+    tl.to(yearDigitsRef.current, {
+      y: slideDistance,
       opacity: 0,
       duration: 0.4,
-    }).to(digitWheelRef.current, {
-      y: 0, // Bring new digit from bottom
+      ease: "power2.in",
+    }).to(yearDigitsRef.current, {
+      y: 0,
       opacity: 1,
-      duration: 0.4,
-      ease: "back.out(1.2)",
+      duration: 0.5,
+      ease: "power2.out",
     });
 
-    // Content wheel-like rotation animation
+    // Content animation - slide out then in (simultaneous with year)
     tl.to(
-      contentItemsRef.current,
+      contentItemsRef.current.filter(Boolean),
       {
-        rotationX: -20,
-        y: -30,
+        y: slideDistance,
         opacity: 0,
         stagger: 0.05,
-        duration: 0.3,
+        duration: 0.4,
+        ease: "power2.in",
       },
-      0
+      0 // Start at the same time as year animation
     ).to(
-      contentItemsRef.current,
+      contentItemsRef.current.filter(Boolean),
       {
-        rotationX: 0,
         y: 0,
         opacity: 1,
         stagger: 0.08,
-        duration: 0.6,
-        ease: "back.out(1.1)",
+        duration: 0.5,
+        ease: "power2.out",
       },
-      0.4
+      0.4 // Start when slide-out completes
     );
   };
 
-  // Animate content items when activeIndex changes
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Pin the section and create scroll trigger
+      ScrollTrigger.create({
+        trigger: sectionRef.current,
+        start: "top top",
+        end: () => `+=${window.innerHeight * years.length}`,
+        pin: true,
+        anticipatePin: 1,
+        scrub: 1,
+        onUpdate: (self) => {
+          if (isAnimating.current) return;
+
+          const progress = self.progress;
+          const segmentSize = 1 / years.length;
+          let newIndex = Math.floor(progress / segmentSize);
+
+          // Ensure we don't go beyond array bounds
+          newIndex = Math.max(0, Math.min(newIndex, years.length - 1));
+
+          // Determine scroll direction
+          const currentProgress = progress;
+          const prevProgress = self.prevProgress || 0;
+          scrollDirection.current = currentProgress > prevProgress ? 1 : -1;
+          self.prevProgress = currentProgress;
+
+          if (newIndex !== activeIndex) {
+            animateToYear(newIndex);
+          }
+        },
+      });
+
+      // Initial animations
+      gsap.fromTo(
+        twentyRef.current,
+        { x: -100, opacity: 0 },
+        { x: 0, opacity: 1, duration: 1.2, ease: "power3.out" }
+      );
+
+      gsap.fromTo(
+        parallelogramRef.current,
+        { x: 100, opacity: 0 },
+        { x: 0, opacity: 1, duration: 1.2, delay: 0.2, ease: "power3.out" }
+      );
+
+      gsap.fromTo(
+        contentRef.current,
+        { x: 150, opacity: 0 },
+        { x: 0, opacity: 1, duration: 1.2, delay: 0.4, ease: "power3.out" }
+      );
+    }, sectionRef);
+
+    return () => ctx.revert();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeIndex, years.length]);
+
+  // Update content when activeIndex changes
   useEffect(() => {
     const items = contentItemsRef.current.filter(Boolean);
     if (items.length > 0) {
       gsap.fromTo(
         items,
-        {
-          y: 30,
-          opacity: 0,
-          scale: 0.95,
-        },
+        { y: 20, opacity: 0 },
         {
           y: 0,
           opacity: 1,
-          scale: 1,
-          duration: 0.8,
+          duration: 0.6,
           stagger: 0.1,
-          ease: "power3.out",
-          delay: 0.2,
+          ease: "power2.out",
+          delay: 0.1,
         }
       );
     }
   }, [activeIndex]);
 
   const currentYearData = newsData[years[activeIndex]];
+  const activeYear = years[activeIndex];
+  const prevYear = activeIndex > 0 ? years[activeIndex - 1] : null;
+  const nextYear =activeIndex < years.length - 1 ? years[activeIndex + 1] : null;
 
   return (
     <section
       ref={sectionRef}
-      className="relative w-full min-h-screen bg-black text-white py-16 px-4 sm:px-6 md:px-12 overflow-hidden"
-      style={{ willChange: "transform" }}
+      className="relative w-full h-screen bg-gray-900 text-white overflow-hidden"
     >
       {/* Header */}
-      <div className="flex items-center justify-between mb-16 relative">
-        <img
-          src="/assets/Logo2.png"
-          alt="Logo"
-          className="w-14 h-auto sm:w-[74px] object-contain"
-        />
-        <h3 className="text-[#405FFC] text-xl sm:text-2xl md:text-[34px] font-[400] tracking-[0.2em] absolute left-1/2 transform -translate-x-1/2 uppercase">
+      <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-10">
+        <h1 className="text-2xl md:text-4xl font-light tracking-[0.3em] text-[#405FFC] uppercase">
           Newsroom
-        </h3>
+        </h1>
       </div>
 
-      <div className="flex flex-col lg:flex-row items-center lg:items-start gap-16 flex-1">
-        {/* Left Year Section with wheel rotation effect */}
-        <div className="relative w-full lg:w-1/2 flex justify-center items-center">
-          <div
-            ref={yearContainerRef}
-            className="relative flex items-center"
-            style={{ willChange: "transform" }}
-          >
-            {/* "20" - Outside the parallelogram */}
-            <div className="text-[120px] sm:text-[140px] md:text-[160px] font-extrabold text-white leading-none mr-[-30px] z-10">
-              20
-            </div>
+      <div className="flex h-full items-center justify-evenly">
+        {/* Left section - "20" (about 35% width) */}
+        <div
+          ref={twentyRef}
+          className="flex-none w-[35%] flex items-center justify-end pr-4"
+        >
+          <div className="text-[8rem] md:text-[12rem] lg:text-[16rem] font-bold text-[#405FFC] leading-none">
+            20
+          </div>
+        </div>
 
-            {/* Red Parallelogram Background with wheel effect for last 2 digits */}
+        {/* Right section - Parallelogram + Content (about 65% width) */}
+        <div className="flex-1 flex items-center relative h-full">
+          {/* Parallelogram with year digits */}
+          <div className="relative flex-none">
             <div
-              className="relative bg-[#405FFC] transform -skew-x-12 shadow-2xl overflow-hidden"
+              ref={parallelogramRef}
+              className="relative bg-[#405FFC] transform -skew-x-12 overflow-hidden"
               style={{
-                width: "255px",
-                height: "280px",
+                width: "250px",
+                height: "350px",
               }}
             >
-              {/* Digit Wheel Container */}
+              {/* Years container with proper stacking */}
               <div className="absolute inset-0 flex items-center justify-center transform skew-x-12">
-                <div className="relative overflow-hidden h-[200px] flex items-center">
-                  {/* Previous Year Digit - Faded and Behind */}
-                  {activeIndex > 0 && (
-                    <div className="absolute text-[120px] sm:text-[140px] md:text-[160px] font-extrabold text-white/30 leading-none transform translate-y-[-120px] z-0">
-                      {String(years[activeIndex - 1]).slice(2)}
+                <div className="relative w-full h-full flex items-center justify-center overflow-hidden">
+                  {/* Previous year (behind/faded) */}
+                  {prevYear && (
+                    <div
+                      className="absolute text-6xl md:text-[16rem] font-bold text-white opacity-20 z-0"
+                      style={{ transform: "translateY(-80px)" }}
+                    >
+                      {String(prevYear).slice(2)}
                     </div>
                   )}
 
-                  {/* Current Year Digit */}
+                  {/* Current year (front) */}
                   <div
-                    ref={digitWheelRef}
-                    className="text-[120px] sm:text-[140px] md:text-[160px] font-extrabold text-white leading-none z-10"
-                    style={{ willChange: "transform" }}
+                    ref={yearDigitsRef}
+                    className="text-8xl md:text-[16rem] font-bold text-white z-20 relative"
                   >
-                    {String(years[activeIndex]).slice(2)}
+                    {String(activeYear).slice(2)}
                   </div>
 
-                  {/* Next Year Digit - Faded and Behind */}
-                  {activeIndex < years.length - 1 && (
-                    <div className="absolute text-[120px] sm:text-[140px] md:text-[160px] font-extrabold text-white/30 leading-none transform translate-y-[120px] z-0">
-                      {String(years[activeIndex + 1]).slice(2)}
+                  {/* Next year (behind/faded) */}
+                  {nextYear && (
+                    <div
+                      className="absolute text-6xl md:text-[16rem] font-bold text-white opacity-20 z-0"
+                      style={{ transform: "translateY(80px)" }}
+                    >
+                      {String(nextYear).slice(2)}
                     </div>
                   )}
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Right Content Section */}
-        <div ref={contentRef} className="w-full lg:w-1/2 flex flex-col gap-8">
-          {currentYearData?.map((item, idx) => (
-            <div
-              key={`${years[activeIndex]}-${idx}`}
-              ref={(el) => (contentItemsRef.current[idx] = el)}
-              className="border-b border-gray-700 pb-6 transform transition-all duration-300 hover:border-[#405FFC] cursor-pointer group"
-              style={{ willChange: "transform, opacity" }}
-            >
-              <h4 className="text-lg sm:text-xl md:text-2xl text-white mb-4 font-medium leading-relaxed group-hover:text-[#405FFC] transition-colors duration-300">
-                {item.title}
-              </h4>
-              <div className="flex flex-wrap gap-6 text-sm">
-                <span className="text-[#405FFC] font-semibold">
-                  {item.location}
-                </span>
-                <span className="text-[#405FFC]">{item.date}</span>
+          {/* Content section */}
+          <div
+            ref={contentRef}
+            className="flex-1 pl-8 pr-8 flex flex-col gap-6 max-h-96 overflow-hidden"
+          >
+            {currentYearData?.map((item, idx) => (
+              <div
+                key={`${activeYear}-${idx}`}
+                ref={(el) => (contentItemsRef.current[idx] = el)}
+                className="border-b border-gray-700 pb-4 cursor-pointer group hover:border-[#405FFC] transition-colors duration-300"
+              >
+                <h3 className="text-base md:text-lg font-medium text-white mb-3 leading-tight group-hover:text-[#405FFC] transition-colors duration-300">
+                  {item.title}
+                </h3>
+                <div className="flex flex-wrap gap-4 text-sm">
+                  <span className="text-[#405FFC] font-medium">
+                    {item.location}
+                  </span>
+                  <span className="text-[#405FFC]">{item.date}</span>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </section>

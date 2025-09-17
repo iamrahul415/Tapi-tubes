@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import product1 from "/assets/Product1Img.jpg";
 import product2 from "/assets/Product2Img.png";
