@@ -13,7 +13,7 @@ function MenuOverlay({ open, onClose }) {
     {
       number: "02",
       label: "Products",
-      to: "/Products",
+      to: "/Product",
       sub: ["Round Tube", "Square Tube", "Rectangle Tube"],
     },
     {

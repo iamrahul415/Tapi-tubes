@@ -1,8 +1,16 @@
 // Pages/ProductDetails.jsx
+import React, { useEffect } from "react";
 import { useParams, Navigate } from "react-router-dom";
-import { getProductById } from "@/Components/ProductsInfo";
-import SendEnquiry from "@/Components/SendEnquiry";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchProductById,
+  selectSelectedProduct,
+  selectSelectedProductLoading,
+  selectSelectedProductError,
+  clearSelectedProduct,
+} from "../redux/productSlice"; // adjust path as needed
 
+import SendEnquiry from "@/Components/SendEnquiry";
 // Product Hero Component
 const ProductHero = ({ title, heroImage, heroAlt }) => {
   return (
@@ -129,26 +137,62 @@ const ProductApplication = ({ applications }) => {
 // Main ProductDetails Component
 function ProductDetails() {
   const { productId } = useParams();
-  const productData = getProductById(productId);
+  const dispatch = useDispatch();
 
-  // If product not found, redirect to products page
+  const productData = useSelector(selectSelectedProduct);
+  const loading = useSelector(selectSelectedProductLoading);
+  const error = useSelector(selectSelectedProductError);
+
+  useEffect(() => {
+    if (productId) {
+      dispatch(fetchProductById(productId));
+    }
+    return () => {
+      dispatch(clearSelectedProduct());
+    };
+  }, [dispatch, productId]);
+
+  // Show loading state
+  if (loading) {
+    return <div className="w-full min-h-screen flex items-center justify-center text-white">Loading product details…</div>;
+  }
+
+  // Show error state
+  if (error) {
+    return <div className="w-full min-h-screen flex items-center justify-center text-red-600">Error loading product: {error}</div>;
+  }
+
+  // Redirect if no product found
   if (!productData) {
-    return <Navigate to="/products" replace />;
+    return <Navigate to="/product" replace />;
   }
 
   return (
     <div className="w-full min-h-screen text-white">
-      <ProductHero 
-        title={productData.title}
-        heroImage={productData.heroImage}
-        heroAlt={productData.heroAlt}
+      <ProductHero
+        title={productData.name}
+        heroImage={productData.mainImage?.url}
+        heroAlt={productData.name}
       />
-      <ProductPara description={productData.description} />
-      <ProductBenefit 
-        benefits={productData.benefits} 
-        benefitImages={productData.benefitImages}
+      <ProductPara description={productData.description.split('\\n')} />
+
+      <ProductBenefit
+        benefits={productData.benefits.map(b => ({ title: b.point, description: b.description || "" }))}
+        benefitImages={{
+          primary: productData.mainImage?.url,
+          secondary: productData.extraImages?.[0]?.url,
+        }}
       />
-      <ProductApplication applications={productData.applications} />
+
+      <ProductApplication
+        applications={{
+          title: "Applications",
+          items: productData.applications.map(a => ({ title: a.point, description: a.description || "" })),
+          image: productData.extraImages?.[1]?.url || "",
+          imageAlt: "Application Image",
+        }}
+      />
+
       {productData.showEnquiry && <SendEnquiry />}
     </div>
   );

@@ -66,7 +66,7 @@ function Navbar() {
           About Us
         </Link>
         <Link
-          to="/products"
+          to="/product"
           className="uppercase cursor-pointer hover:text-[#405FFC] transition"
         >
           Products

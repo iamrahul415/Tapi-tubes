@@ -39,7 +39,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/about-us-detail" element={<AboutUsDetail />} />
-        <Route path="/products" element={<ProductPage />} />
+        <Route path="/product" element={<ProductPage />} />
         
         {/* Dynamic Product Details Route */}
         <Route path="/product/:productId" element={<ProductDetails />} />
