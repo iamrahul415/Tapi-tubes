@@ -1,55 +1,43 @@
 import { useState, useEffect, useRef } from "react";
-
-const profiles = [
-  {
-    id: "manager",
-    name: "Manager Rahul Paswan",
-    role: "MANAGER",
-    img: "/assets/ManagerImg.jpg",
-    type: "square",
-    content: `The visionary behind TapiTubes Ltd., established the company with a mission to provide high-quality steel tubes and pipes that meet the evolving demands of industries and infrastructure. With a strong background in metallurgy, engineering, and business leadership, [Founder’s Name] combined technical expertise with an entrepreneurial spirit to build a brand that stands for strength, reliability, and trust.
-    Under his leadership, TapiTubes has grown from a promising idea into a respected name in the steel industry, known for precision engineering, consistency, and customer-centric values. His commitment to innovation, quality, and sustainability continues to guide the company’s growth and ensures that TapiTubes remains a reliable partner for industries worldwide.`,
-  },
-  {
-    id: "founder",
-    name: "Founder Mohit Singh",
-    role: "FOUNDER",
-    img: "/assets/FounderImg.png",
-    type: "square",
-    content: `The visionary behind TapiTubes Ltd., established the company with a mission to provide high-quality steel tubes and pipes that meet the evolving demands of industries and infrastructure. With a strong background in metallurgy, engineering, and business leadership, [Founder’s Name] combined technical expertise with an entrepreneurial spirit to build a brand that stands for strength, reliability, and trust.
-    Under his leadership, TapiTubes has grown from a promising idea into a respected name in the steel industry, known for precision engineering, consistency, and customer-centric values. His commitment to innovation, quality, and sustainability continues to guide the company’s growth and ensures that TapiTubes remains a reliable partner for industries worldwide.`,
-  },
-  {
-    id: "cfo",
-    name: "CFO Nikhil Thorry",
-    role: "CFO",
-    img: "/assets/CFOImg.png",
-    type: "square",
-    content: `The visionary behind TapiTubes Ltd., established the company with a mission to provide high-quality steel tubes and pipes that meet the evolving demands of industries and infrastructure. With a strong background in metallurgy, engineering, and business leadership, [Founder’s Name] combined technical expertise with an entrepreneurial spirit to build a brand that stands for strength, reliability, and trust.
-    Under his leadership, TapiTubes has grown from a promising idea into a respected name in the steel industry, known for precision engineering, consistency, and customer-centric values. His commitment to innovation, quality, and sustainability continues to guide the company’s growth and ensures that TapiTubes remains a reliable partner for industries worldwide.`,
-  },
-];
+import { useDispatch, useSelector } from 'react-redux';
+import { 
+  fetchTeamMembers, 
+  selectTeamMembers, 
+  selectTeamLoading, 
+  selectTeamError 
+} from '../redux/personSlice';
 
 function PeopleMain() {
-  const [activeIndex, setActiveIndex] = useState(1); // Default Founder
+  const dispatch = useDispatch();
+  const teamMembers = useSelector(selectTeamMembers);
+  const loading = useSelector(selectTeamLoading);
+  const error = useSelector(selectTeamError);
+
+  const [activeIndex, setActiveIndex] = useState(0); // Start with first member
   const [paused, setPaused] = useState(false); // pause state
   const cardRefs = useRef({});
   const textRef = useRef(null);
   const imageRef = useRef(null);
 
-  // Auto change every 2s, but only if not paused
+  // Fetch team members on component mount
   useEffect(() => {
-    if (paused) return;
+    dispatch(fetchTeamMembers());
+  }, [dispatch]);
+
+  // Auto change every 2s, but only if not paused and we have team members
+  useEffect(() => {
+    if (paused || teamMembers.length === 0) return;
 
     const interval = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % profiles.length);
+      setActiveIndex((prev) => (prev + 1) % teamMembers.length);
     }, 2000);
 
     return () => clearInterval(interval);
-  }, [paused]);
+  }, [paused, teamMembers.length]);
 
   const getDisplayOrder = () => {
-    const total = profiles.length;
+    if (teamMembers.length === 0) return [];
+    const total = teamMembers.length;
     const left = (activeIndex - 1 + total) % total;
     const right = (activeIndex + 1) % total;
     return [left, activeIndex, right];
@@ -62,10 +50,12 @@ function PeopleMain() {
   };
 
   useEffect(() => {
-    displayOrder.forEach((profileIndex, position) => {
-      const profileId = profiles[profileIndex].id;
-      if (cardRefs.current[profileId]) {
-        const card = cardRefs.current[profileId];
+    if (teamMembers.length === 0) return;
+
+    displayOrder.forEach((memberIndex, position) => {
+      const memberId = teamMembers[memberIndex]._id;
+      if (cardRefs.current[memberId]) {
+        const card = cardRefs.current[memberId];
         const isCenter = position === 1;
 
         card.style.transform = `scale(${isCenter ? 1.05 : 0.85}) translateY(${
@@ -92,7 +82,48 @@ function PeopleMain() {
     }
   });
 
-  const activeProfile = profiles[activeIndex];
+  // Loading state
+  if (loading) {
+    return (
+      <section className="bg-black text-white px-4 py-12 md:px-12 flex flex-col items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <p className="text-xl">Loading team members...</p>
+        </div>
+      </section>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <section className="bg-black text-white px-4 py-12 md:px-12 flex flex-col items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="text-red-500 text-6xl mb-4">⚠️</div>
+          <p className="text-xl text-red-400">Error loading team members: {error}</p>
+          <button 
+            onClick={() => dispatch(fetchTeamMembers())}
+            className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Try Again
+          </button>
+        </div>
+      </section>
+    );
+  }
+
+  // No team members state
+  if (teamMembers.length === 0) {
+    return (
+      <section className="bg-black text-white px-4 py-12 md:px-12 flex flex-col items-center justify-center min-h-screen">
+        <div className="text-center">
+          <p className="text-xl">No team members found.</p>
+        </div>
+      </section>
+    );
+  }
+
+  const activeProfile = teamMembers[activeIndex];
 
   return (
     <section
@@ -102,14 +133,14 @@ function PeopleMain() {
     >
       {/* Top Profiles */}
       <div className="flex justify-center items-end gap-6">
-        {displayOrder.map((profileIndex, position) => {
-          const profile = profiles[profileIndex];
+        {displayOrder.map((memberIndex, position) => {
+          const member = teamMembers[memberIndex];
           const isCenter = position === 1;
           return (
             <div
-              key={profile.id}
-              ref={(el) => (cardRefs.current[profile.id] = el)}
-              onClick={() => handleClick(profileIndex)}
+              key={member._id}
+              ref={(el) => (cardRefs.current[member._id] = el)}
+              onClick={() => handleClick(memberIndex)}
               className={`relative flex flex-col items-center bg-black border border-blue-500 rounded-2xl overflow-hidden cursor-pointer transition-all duration-500 ${
                 isCenter ? "w-64 h-[340px]" : "w-44 h-60"
               }`}
@@ -122,18 +153,22 @@ function PeopleMain() {
             >
               {/* Image */}
               <img
-                src={profile.img}
-                alt={profile.role}
+                src={member.image.url}
+                alt={member.designation}
                 className="object-cover w-full h-full rounded-2xl"
+                onError={(e) => {
+                  // Fallback image if the API image fails to load
+                  e.target.src = "/assets/default-profile.jpg";
+                }}
               />
 
               {/* Role Label */}
               <span
                 className={`absolute bottom-[1.5rem] left-[-0.5rem] px-3 py-1 rounded text-white text-sm font-semibold ${
-                  profile.role === "FOUNDER" ? "bg-blue-600" : "bg-blue-500"
+                  member.designation.toUpperCase() === "FOUNDER" ? "bg-blue-600" : "bg-blue-500"
                 }`}
               >
-                {profile.role}
+                {member.designation.toUpperCase()}
               </span>
             </div>
           );
@@ -142,7 +177,7 @@ function PeopleMain() {
 
       {/* Dots */}
       <div className="flex justify-center space-x-2 mt-6">
-        {profiles.map((_, index) => (
+        {teamMembers.map((_, index) => (
           <span
             key={index}
             onClick={() => handleClick(index)}
@@ -155,7 +190,7 @@ function PeopleMain() {
 
       {/* Bottom Active Profile Content */}
       <div
-        key={activeProfile.id}
+        key={activeProfile._id}
         className="mt-14 max-w-5xl mx-auto rounded-2xl overflow-hidden cursor-pointer transform transition-all duration-500 hover:scale-[1.02] 
              border border-transparent hover:border-blue-500 shadow-lg hover:shadow-[0_0_25px_5px_rgba(59,130,246,0.6)]"
       >
@@ -166,16 +201,20 @@ function PeopleMain() {
               {activeProfile.name}
             </h2>
             <p className="text-gray-300 leading-relaxed text-justify">
-              {activeProfile.content}
+              {activeProfile.description}
             </p>
           </div>
 
           {/* Image */}
           <div ref={imageRef} className="flex justify-center md:justify-end">
             <img
-              src={activeProfile.img}
+              src={activeProfile.image.url}
               alt={activeProfile.name}
               className="w-80 h-[420px] object-cover rounded-xl shadow-md"
+              onError={(e) => {
+                // Fallback image if the API image fails to load
+                e.target.src = "/assets/default-profile.jpg";
+              }}
             />
           </div>
         </div>
