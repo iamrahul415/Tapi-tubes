@@ -1,3 +1,4 @@
+//redux/productSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 // Initial state

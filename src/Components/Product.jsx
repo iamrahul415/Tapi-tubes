@@ -18,14 +18,14 @@ const Product = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-[5.5rem]">
         {/* Left Column (2 products) */}
         <div className="space-y-10">
-          {/* Product 1 */}
+          {/* Product 1 - Rectangle Tubes */}
           <div className="relative group">
             <img
               src="/assets/Product1Img.jpg"
               alt="ERW Black Rectangular Tubes"
               className="w-full h-[240px] sm:h-[300px] md:h-[340px] object-cover rounded-xl shadow-lg group-hover:scale-105 transition-transform duration-500 ease-out"
             />
-            <Link to="/Product1Page">
+            <Link to="/product/product1">
               <button className="absolute bottom-[3.5rem] right-6 bg-gradient-to-r from-blue-500 to-blue-700 px-4 sm:px-5 py-2 text-lg sm:text-xl font-semibold rounded-md opacity-90 hover:opacity-100 shadow-lg shadow-blue-600/50 transition">
                 Discover
               </button>
@@ -35,14 +35,14 @@ const Product = () => {
             </h3>
           </div>
 
-          {/* Product 2 */}
+          {/* Product 2 - Square Tubes */}
           <div className="relative group">
             <img
               src="/assets/Product2Img.png"
               alt="ERW Black Square Tubes"
               className="w-full h-[240px] sm:h-[300px] md:h-[340px] object-cover rounded-xl shadow-lg group-hover:scale-105 transition-transform duration-500 ease-out"
             />
-            <Link to="/Product2Page">
+            <Link to="/product/product2">
               <button className="absolute bottom-[3.5rem] right-6 bg-gradient-to-r from-blue-500 to-blue-700 px-4 sm:px-5 py-2 text-lg sm:text-xl font-semibold rounded-md opacity-90 hover:opacity-100 shadow-lg shadow-blue-600/50 transition">
                 Discover
               </button>
@@ -53,9 +53,9 @@ const Product = () => {
           </div>
         </div>
 
-        {/* Right Column (Product 3, 4, 5) */}
+        {/* Right Column (Product 3 + decorative images) */}
         <div className="flex flex-col items-center space-y-6">
-          {/* Product 3 (smaller, top) */}
+          {/* Decorative Image (top) */}
           <div className="hidden sm:block w-[60%]">
             <img
               src="/assets/Img2.png"
@@ -64,24 +64,24 @@ const Product = () => {
             />
           </div>
 
-          {/* Product 4 (main, centered) */}
+          {/* Product 3 - Round Tubes (Updated from Oval to Round based on your data) */}
           <div className="relative group w-full">
             <img
               src="/assets/Product3Img.jpg"
-              alt="ERW Black Oval Tubes"
+              alt="ERW Black Round Tubes"
               className="w-full h-[240px] sm:h-[300px] md:h-[360px] object-cover rounded-xl shadow-lg group-hover:scale-105 transition-transform duration-500 ease-out"
             />
-            <Link to="/Product3Page">
+            <Link to="/product/product3">
               <button className="absolute bottom-[3.5rem] left-6 bg-gradient-to-r from-blue-500 to-blue-700 px-4 sm:px-5 py-2 text-lg sm:text-xl font-semibold rounded-md opacity-90 hover:opacity-100 shadow-lg shadow-blue-600/50 transition">
                 Discover
               </button>
             </Link>
             <h3 className="mt-4 text-lg sm:text-xl font-semibold text-center">
-              ERW Black Oval Tubes
+              ERW Black Round Tubes
             </h3>
           </div>
 
-          {/* Product 5 (smaller, bottom) */}
+          {/* Decorative Image (bottom) */}
           <div className="hidden sm:block w-[60%]">
             <img
               src="/assets/Img1.png"
