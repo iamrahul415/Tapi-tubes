@@ -1,191 +1,229 @@
-import React, { useState } from "react";
-
-const pressReleases = [
-  {
-    year: 2025,
-    items: [
-      {
-        date: "Delhi / Mumbai | 25 July, 2025",
-        title:
-          "Metal Fairs 2024 Showcases Strong Industry Growth with Impressive Turnout, Highlighting Positive Trends and Developments",
-        description:
-          "Mumbai, December 2024: The four renowned metal trade fairs—wire India, Tube India, METEC India, and India Essen Welding & Cutting - successfully concluded at the Bombay Exhibition Center from 27-29 November, after a two-year hiatus. The enthusiasm displayed by industry participants was an encouraging sign of the sector’s recovery and growth. Organized by Messe Düsseldorf India, these fairs have long been a prominent gathering for professionals from the wire, cable, tube, metallurgical processes, cutting, and welding industries in both India and internationally. This year, the event garnered a significant response, with 21,086 attendees visiting to witness the latest innovations and trends in the metal industry. The high turnout was a testament to the enduring importance of these fairs in facilitating business connections, showcasing technological advancements, and highlighting industry trends.",
-        img: "/assets/Tapi1Img.png",
-      },
-    ],
-  },
-  {
-    year: 2024,
-    items: [
-      {
-        date: "Delhi / Mumbai | 25 July, 2025",
-        title:
-          "Metal Fairs 2024 Showcases Strong Industry Growth with Impressive Turnout, Highlighting Positive Trends and Developments",
-        description:
-          "Mumbai, December 2024: The four renowned metal trade fairs—wire India, Tube India, METEC India, and India Essen Welding & Cutting - successfully concluded at the Bombay Exhibition Center from 27-29 November, after a two-year hiatus. The enthusiasm displayed by industry participants was an encouraging sign of the sector’s recovery and growth. Organized by Messe Düsseldorf India, these fairs have long been a prominent gathering for professionals from the wire, cable, tube, metallurgical processes, cutting, and welding industries in both India and internationally. This year, the event garnered a significant response, with 21,086 attendees visiting to witness the latest innovations and trends in the metal industry. The high turnout was a testament to the enduring importance of these fairs in facilitating business connections, showcasing technological advancements, and highlighting industry trends.",
-        img: "/assets/Tapi2Img.png",
-      },
-    ],
-  },
-  {
-    year: 2023,
-    items: [
-      {
-        date: "Delhi / Mumbai | 25 July, 2025",
-        title:
-          "Metal Fairs 2024 Showcases Strong Industry Growth with Impressive Turnout, Highlighting Positive Trends and Developments",
-        description:
-          "Mumbai, December 2024: The four renowned metal trade fairs—wire India, Tube India, METEC India, and India Essen Welding & Cutting - successfully concluded at the Bombay Exhibition Center from 27-29 November, after a two-year hiatus. The enthusiasm displayed by industry participants was an encouraging sign of the sector’s recovery and growth. Organized by Messe Düsseldorf India, these fairs have long been a prominent gathering for professionals from the wire, cable, tube, metallurgical processes, cutting, and welding industries in both India and internationally. This year, the event garnered a significant response, with 21,086 attendees visiting to witness the latest innovations and trends in the metal industry. The high turnout was a testament to the enduring importance of these fairs in facilitating business connections, showcasing technological advancements, and highlighting industry trends.",
-        img: "/assets/Tapi3Img.png",
-      },
-    ],
-  },
-  {
-    year: 2022,
-    items: [
-      {
-        date: "Delhi / Mumbai | 25 July, 2025",
-        title:
-          "Metal Fairs 2024 Showcases Strong Industry Growth with Impressive Turnout, Highlighting Positive Trends and Developments",
-        description:
-          "Mumbai, December 2024: The four renowned metal trade fairs—wire India, Tube India, METEC India, and India Essen Welding & Cutting - successfully concluded at the Bombay Exhibition Center from 27-29 November, after a two-year hiatus. The enthusiasm displayed by industry participants was an encouraging sign of the sector’s recovery and growth. Organized by Messe Düsseldorf India, these fairs have long been a prominent gathering for professionals from the wire, cable, tube, metallurgical processes, cutting, and welding industries in both India and internationally. This year, the event garnered a significant response, with 21,086 attendees visiting to witness the latest innovations and trends in the metal industry. The high turnout was a testament to the enduring importance of these fairs in facilitating business connections, showcasing technological advancements, and highlighting industry trends.",
-        img: "/assets/Tapi4Img.png",
-      },
-    ],
-  },
-];
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getAllBlogs,
+  selectBlogs,
+  selectBlogsLoading,
+  selectBlogsError
+} from "../redux/blogsSlice";
+import { X, Calendar, ArrowRight, ExternalLink } from "lucide-react";
 
 const PressReleaseMain = () => {
-  const [overlay, setOverlay] = useState({ open: false, item: null });
+  const dispatch = useDispatch();
+  const blogs = useSelector(selectBlogs);
+  const loading = useSelector(selectBlogsLoading);
+  const error = useSelector(selectBlogsError);
 
-  const openOverlay = (item) => setOverlay({ open: true, item });
-  const closeOverlay = () => setOverlay({ open: false, item: null });
+  const [overlay, setOverlay] = useState({ open: false, blog: null });
+  const [imageLoaded, setImageLoaded] = useState({});
 
-  return (
-    <section className="relative w-full bg-black text-white px-6 md:px-16">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
-          {/* Middle timeline line for desktop */}
-          <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-[2px] bg-gray-600 -translate-x-1/2"></div>
+  useEffect(() => {
+    dispatch(getAllBlogs());
+  }, [dispatch]);
 
-          {pressReleases.map((yearBlock, index) => {
-            const isOdd = index % 2 === 0;
+  const openOverlay = (blog) => {
+    setOverlay({ open: true, blog });
+    document.body.style.overflow = 'hidden';
+  };
+  
+  const closeOverlay = () => {
+    setOverlay({ open: false, blog: null });
+    document.body.style.overflow = 'unset';
+  };
 
-            return (
-              <React.Fragment key={yearBlock.year}>
-                {/* Left column */}
-                <div className={`flex justify-end ${isOdd ? "mt-0" : "mt-16"}`}>
-                  {isOdd && (
-                    <div className="w-full md:max-w-md">
-                      {/* Year (mobile only, centered) */}
-                      <div className="flex justify-center mb-4 md:hidden">
-                        <span className="bg-black px-3 py-1 font-bold text-xl">
-                          {yearBlock.year}
-                        </span>
-                      </div>
+  const handleImageLoad = (blogId) => {
+    setImageLoaded(prev => ({ ...prev, [blogId]: true }));
+  };
 
-                      {/* Card */}
-                      <div className="bg-black p-6 space-y-4">
-                        <p className="text-blue-400 font-medium">
-                          {yearBlock.items[0].date}
-                        </p>
-                        <p className="text-sm md:text-base leading-relaxed text-gray-300 hover:text-blue-400 cursor-pointer transition-colors duration-300">
-                          {yearBlock.items[0].title}
-                        </p>
-                        <img
-                          src={yearBlock.items[0].img}
-                          alt="Press release"
-                          className="w-full bg-[#565050b4] cursor-pointer transform transition-transform duration-300 hover:scale-105"
-                          onClick={() => openOverlay(yearBlock.items[0])}
-                        />
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* Middle column (year) – desktop only */}
-                <div className="hidden md:flex items-start justify-center relative">
-                  <span className="bg-black px-3 py-1 font-bold text-3xl">
-                    {yearBlock.year}
-                  </span>
-                </div>
-
-                {/* Right column */}
-                <div
-                  className={`flex justify-start ${!isOdd ? "mt-0" : "mt-16"}`}
-                >
-                  {!isOdd && (
-                    <div className="w-full md:max-w-md">
-                      {/* Year (mobile only, centered) */}
-                      <div className="flex justify-center mb-4 md:hidden">
-                        <span className="bg-black px-3 py-1 font-bold text-xl">
-                          {yearBlock.year}
-                        </span>
-                      </div>
-
-                      {/* Card */}
-                      <div className="bg-black p-6 space-y-4">
-                        <p className="text-blue-400 font-medium">
-                          {yearBlock.items[0].date}
-                        </p>
-                        <p className="text-sm md:text-base leading-relaxed text-gray-300 hover:text-blue-400 cursor-pointer transition-colors duration-300">
-                          {yearBlock.items[0].title}
-                        </p>
-                        <img
-                          src={yearBlock.items[0].img}
-                          alt="Press release"
-                          className="w-full bg-[#565050b4] cursor-pointer transform transition-transform duration-300 hover:scale-105"
-                          onClick={() => openOverlay(yearBlock.items[0])}
-                        />
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </React.Fragment>
-            );
-          })}
+  if (loading) {
+    return (
+      <div className="w-full min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
+        <div className="flex flex-col items-center space-y-4">
+          <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-white/80 text-lg font-medium">Loading articles...</p>
         </div>
       </div>
+    );
+  }
 
-      {/* Overlay */}
-      {overlay.open && overlay.item && (
-        <div className="fixed inset-0 bg-transparent flex items-center justify-center z-50 p-4">
-          <div className="bg-blue-900/90 max-w-6xl w-full flex flex-col md:flex-row relative rounded-lg overflow-hidden shadow-lg">
-            {/* ✅ Close button now relative to whole overlay box */}
+  if (error) {
+    return (
+      <div className="w-full min-h-screen bg-gradient-to-br from-slate-900 via-red-900 to-slate-900 flex items-center justify-center">
+        <div className="text-center p-8 bg-red-950/30 rounded-2xl border border-red-800/30 backdrop-blur-sm">
+          <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <X className="w-8 h-8 text-red-400" />
+          </div>
+          <h2 className="text-2xl font-bold text-white mb-2">Something went wrong</h2>
+          <p className="text-red-300">Error loading articles: {error}</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <section className="min-h-screen bg-black py-20 px-4 md:px-8 lg:px-16">
+        {/* Articles Grid */}
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-2 gap-8">
+            {blogs.map((blog, index) => (
+              <article
+                key={blog._id}
+                className="group cursor-pointer"
+                onClick={() => openOverlay(blog)}
+                style={{ 
+                  animationDelay: `${index * 100}ms`,
+                  animation: 'fadeInUp 0.6s ease-out forwards'
+                }}
+              >
+                {/* Date and Location */}
+                <div className="mb-4">
+                  <div className="flex items-center text-blue-400 text-sm font-medium mb-2">
+                    <Calendar className="w-4 h-4 mr-2" />
+                    <time>
+                      {new Date(blog.createdAt).toLocaleDateString('en-GB', {
+                        day: 'numeric', 
+                        month: 'long', 
+                        year: 'numeric'
+                      })}
+                    </time>
+                  </div>
+                </div>
+
+                {/* Title */}
+                <h3 className="text-white text-lg font-semibold leading-tight mb-6 group-hover:text-blue-400 transition-colors duration-300 line-clamp-3">
+                  {blog.title}
+                </h3>
+
+                {/* Image Container */}
+                <div className="relative aspect-video overflow-hidden rounded-lg bg-gray-800">
+                  {!imageLoaded[blog._id] && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-gray-800">
+                      <div className="w-6 h-6 border-2 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
+                    </div>
+                  )}
+                  <img
+                    src={blog.blogImgUrl?.url}
+                    alt={blog.title}
+                    className={`w-full h-full object-cover transition-all duration-500 group-hover:scale-105 ${
+                      imageLoaded[blog._id] ? 'opacity-100' : 'opacity-0'
+                    }`}
+                    onLoad={() => handleImageLoad(blog._id)}
+                  />
+                  
+                  {/* Hover overlay */}
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <div className="bg-white/20 backdrop-blur-sm rounded-full p-3 transform scale-75 group-hover:scale-100 transition-transform duration-300">
+                      <ExternalLink className="w-5 h-5 text-white" />
+                    </div>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Modal Overlay */}
+      {overlay.open && overlay.blog && (
+        <div className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fadeIn">
+          <div className="relative bg-gray-900 text-white rounded-lg max-w-7xl w-full shadow-2xl animate-slideIn overflow-hidden max-h-[90vh] flex flex-col">
+            
+            {/* Close Button */}
             <button
               onClick={closeOverlay}
-              className="absolute top-4 right-4 text-[#dfce7c] px-4 py-2 font-normal z-10"
+              className="absolute top-4 right-4 z-10 text-white hover:text-gray-300 transition-colors duration-300 bg-black/30 hover:bg-black/50 rounded-full p-2"
             >
-              CLOSE
+              <X className="w-6 h-6" />
             </button>
 
-            {/* Left side: Image, centered vertically */}
-            <div className="md:w-1/2 w-full flex items-center justify-center p-4">
-              <img
-                src={overlay.item.img}
-                alt="Press release"
-                className="w-full h-auto object-contain"
-              />
-            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[60vh] flex-1">
+              {/* Left: Image */}
+              <div className="relative overflow-hidden bg-gray-800">
+                <img
+                  src={overlay.blog.blogImgUrl?.url}
+                  alt={overlay.blog.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
 
-            {/* Right side: Details */}
-            <div className="md:w-1/2 w-full p-10 relative text-white flex flex-col justify-start">
-              <div className="mt-8 md:mt-0 flex flex-col h-[60vh] md:h-[70vh] relative">
-                <h2 className="text-2xl md:text-4xl font-semibold font-poppins mb-2">
-                  {overlay.item.title}
-                </h2>
-                <p className="text-[#dfce7c] mb-4">{overlay.item.date}</p>
-
-                {/* Scrollable description */}
-                <div className="overflow-y-auto text-[#ffffff] flex-1 relative custom-scroll">
-                  <p className="mb-4">{overlay.item.description}</p>
+              {/* Right: Content */}
+              <div className="p-8 lg:p-12 overflow-y-auto bg-gray-900 overflow-x-hidden">
+                {/* Date */}
+                <div className="flex items-center text-blue-400 text-sm font-medium mb-6">
+                  <Calendar className="w-4 h-4 mr-2" />
+                  <time>
+                    {new Date(overlay.blog.createdAt).toLocaleDateString('en-GB', {
+                      day: 'numeric', 
+                      month: 'long', 
+                      year: 'numeric'
+                    })}
+                  </time>
                 </div>
+                
+                {/* Title */}
+                <h2 className="text-2xl lg:text-3xl font-bold text-white mb-8 leading-tight break-words">
+                  {overlay.blog.title}
+                </h2>
+                
+                {/* Content */}
+                <div
+                  className="prose prose-invert max-w-none text-gray-300 leading-relaxed prose-p:text-gray-300 prose-headings:text-white prose-a:text-blue-400 prose-strong:text-white break-words"
+                  style={{ wordWrap: 'break-word', overflowWrap: 'break-word' }}
+                  dangerouslySetInnerHTML={{
+                    __html: overlay.blog.blogContent?.markup || overlay.blog.content
+                  }}
+                />
               </div>
             </div>
           </div>
         </div>
       )}
-    </section>
+
+      <style jsx>{`
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        
+        @keyframes slideIn {
+          from {
+            opacity: 0;
+            transform: scale(0.95) translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+          }
+        }
+        
+        .animate-fadeIn {
+          animation: fadeIn 0.3s ease-out;
+        }
+        
+        .animate-slideIn {
+          animation: slideIn 0.4s ease-out;
+        }
+        
+        .line-clamp-3 {
+          display: -webkit-box;
+          -webkit-line-clamp: 3;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+      `}</style>
+    </>
   );
 };
 
