@@ -45,14 +45,14 @@ const Product = () => {
     return <p className="text-red-500 text-center py-20">Error: {error}</p>;
 
   return (
-    <section className="w-full min-h-screen bg-black text-white px-6 md:px-12 py-[0.5rem]">
+    <section className="w-full min-h-screen bg-black text-white px-6 md:px-12 py-24">
       {/* Heading */}
       <div className="mb-16">
         <motion.h2
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-4xl sm:text-5xl font-semibold font-poppins tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600 text-left ml-[2]"
+          className="text-4xl sm:text-5xl font-semibold font-poppins tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600 text-left ml-[ ]"
         >
           PRODUCT
         </motion.h2>
@@ -117,7 +117,7 @@ const Product = () => {
               transition={{ duration: 0.7, ease: "easeOut", delay: 0.6 }}
               className="relative group mt-40"
             >
-              <div className="relative w-[621px] h-[414px] rounded-xl border-4 border-transparent group-hover:border-blue-500 overflow-hidden shadow-2xl transition-transform duration-500 ease-out mx-auto">
+              <div className="relative w-[621px] h-[414px] rounded-xl border-4 border-transparent group-hover:border-blue-500 overflow-hidden shadow-2xl transition-transform duration-500 ease-out mx-auto group-hover:scale-105">
                 <img
                   src={products[2].mainImage?.url}
                   alt={products[2].name}
