@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchProducts,
@@ -7,6 +7,7 @@ import {
   selectProductsLoading,
   selectProductsError,
 } from "../redux/productSlice";
+// eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 
 const Product = () => {
@@ -20,38 +21,32 @@ const Product = () => {
     dispatch(fetchProducts());
   }, [dispatch]);
 
-  // ✅ FIX 1: Add debouncing to prevent double clicks
   const lastClickTime = useRef(0);
-  
+
   const handleDiscoverClick = (e, productId) => {
     e.preventDefault();
     e.stopPropagation();
-    
-    // Debounce clicks - ignore clicks within 1 second of each other
+
     const now = Date.now();
-    if (now - lastClickTime.current < 1000) {
-      console.log('Click ignored - too soon after previous click');
-      return;
-    }
+    if (now - lastClickTime.current < 1000) return;
     lastClickTime.current = now;
-    
-    console.log('Discover button clicked for product:', productId);
+
     navigate(`/product/${productId}`);
   };
 
   if (loading) {
     return (
-      <section className="w-full min-h-screen bg-black text-white px-6 md:px-12 py-14">
+      <section className="w-full min-h-screen bg-black text-white px-4 sm:px-6 md:px-12 py-10">
         <div className="mb-5">
-          <h2 className="text-4xl sm:text-5xl font-bold font-poppins tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600 text-left">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold font-poppins tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600 text-left">
             PRODUCT
           </h2>
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-12 relative max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-12 relative max-w-7xl mx-auto">
           {[...Array(3)].map((_, i) => (
             <div
               key={i}
-              className="w-96 h-72 bg-gray-700/50 rounded-xl mx-auto animate-pulse"
+              className="w-full h-56 sm:h-72 bg-gray-700/50 rounded-xl mx-auto animate-pulse"
             ></div>
           ))}
         </div>
@@ -63,22 +58,22 @@ const Product = () => {
     return <p className="text-red-500 text-center py-20">Error: {error}</p>;
 
   return (
-    <section className="w-full min-h-screen bg-black text-white px-6 md:px-12 py-24">
+    <section className="w-full min-h-screen bg-black text-white px-4 sm:px-6 md:px-12 py-16 sm:py-24">
       {/* Heading */}
-      <div className="mb-16">
+      <div className="mb-10 sm:mb-16">
         <motion.h2
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-4xl sm:text-5xl font-semibold font-poppins tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600 text-left"
+          className="text-3xl sm:text-4xl md:text-5xl font-semibold font-poppins tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600 text-left"
         >
           PRODUCT
         </motion.h2>
       </div>
 
-      <div className="relative max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-x-16">
+      <div className="relative max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
         {/* Left side with 2 products */}
-        <div className="space-y-20 relative z-10">
+        <div className="space-y-10 sm:space-y-16 relative z-10">
           {products.slice(0, 2).map((product, index) => (
             <motion.div
               key={product._id}
@@ -92,21 +87,20 @@ const Product = () => {
               className="relative group"
             >
               {/* Image Container */}
-              <div className="relative w-[621px] h-[414px] rounded-xl border-4 border-transparent group-hover:border-blue-500 overflow-hidden shadow-2xl transition-transform duration-500 ease-out mx-auto group-hover:scale-105">
+              <div className="relative w-full h-56 sm:h-72 md:h-96 rounded-xl border-2 sm:border-4 border-transparent group-hover:border-blue-500 overflow-hidden shadow-2xl transition-transform duration-500 ease-out mx-auto group-hover:scale-105">
                 <img
                   src={product.mainImage?.url}
                   alt={product.name}
                   className="w-full h-full object-cover"
                 />
-                {/* ✅ FIX 2: Use button instead of Link for more control */}
                 <button
                   onClick={(e) => handleDiscoverClick(e, product._id)}
-                  className="absolute bottom-6 right-6 bg-blue-600/90 hover:bg-blue-500 px-5 py-2 text-white font-semibold rounded-md transition-all duration-300 shadow-lg z-20 cursor-pointer"
+                  className="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 bg-blue-600/90 hover:bg-blue-500 px-4 sm:px-5 py-2 text-sm sm:text-base text-white font-semibold rounded-md transition-all duration-300 shadow-lg z-20 cursor-pointer"
                 >
                   Discover
                 </button>
               </div>
-              <h3 className="mt-4 text-lg font-bold font-poppins text-white text-center leading-tight">
+              <h3 className="mt-3 sm:mt-4 text-base sm:text-lg font-bold font-poppins text-white text-center leading-tight">
                 {product.name}
               </h3>
             </motion.div>
@@ -114,9 +108,9 @@ const Product = () => {
         </div>
 
         {/* Right side with 1 product + decorative images */}
-        <div className="relative z-10">
-          {/* Decorative Top Image */}
-          <div className="absolute -top-20 right-0 w-[41rem] h-[16rem] opacity-50">
+        <div className="relative z-10 mt-10 lg:mt-0">
+          {/* Decorative Top Image - hidden on mobile */}
+          <div className="hidden sm:block absolute -top-10 right-0 w-64 sm:w-[28rem] h-32 sm:h-64 opacity-50 pointer-events-none">
             <img
               src="../assets/Img2.png"
               alt="Decorative"
@@ -131,30 +125,29 @@ const Product = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease: "easeOut", delay: 0.6 }}
-              className="relative group mt-40"
+              className="relative group  sm:mt-16 lg:mt-40"
             >
-              <div className="relative w-[621px] h-[414px] rounded-xl border-4 border-transparent group-hover:border-blue-500 overflow-hidden shadow-2xl transition-transform duration-500 ease-out mx-auto group-hover:scale-105">
+              <div className="relative w-full h-56 sm:h-72 md:h-96 rounded-xl border-2 sm:border-4 border-transparent group-hover:border-blue-500 overflow-hidden shadow-2xl transition-transform duration-500 ease-out mx-auto group-hover:scale-105">
                 <img
                   src={products[2].mainImage?.url}
                   alt={products[2].name}
                   className="w-full h-full object-cover"
                 />
-                {/* ✅ FIX 3: Use button for consistency */}
                 <button
                   onClick={(e) => handleDiscoverClick(e, products[2]._id)}
-                  className="absolute bottom-6 right-6 bg-blue-600/90 hover:bg-blue-500 px-5 py-2 text-white font-semibold rounded-md transition-all duration-300 shadow-lg z-20 cursor-pointer"
+                  className="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 bg-blue-600/90 hover:bg-blue-500 px-4 sm:px-5 py-2 text-sm sm:text-base text-white font-semibold rounded-md transition-all duration-300 shadow-lg z-20 cursor-pointer"
                 >
                   Discover
                 </button>
               </div>
-              <h3 className="mt-4 text-lg font-bold font-poppins text-white text-center leading-tight">
+              <h3 className="mt-3 sm:mt-4 text-base sm:text-lg font-bold font-poppins text-white text-center leading-tight">
                 {products[2].name}
               </h3>
             </motion.div>
           )}
 
-          {/* Decorative Bottom Image */}
-          <div className="absolute -bottom-28 right-0 w-[35rem] h-[28rem] opacity-50">
+          {/* Decorative Bottom Image - hidden on mobile */}
+          <div className="hidden sm:block absolute -bottom-16 right-0 w-64 sm:w-[35rem] h-40 sm:h-[25rem] opacity-50 pointer-events-none">
             <img
               src="../assets/Img1.png"
               alt="Decorative"
@@ -165,12 +158,12 @@ const Product = () => {
       </div>
 
       {/* Know More Button */}
-      <div className="flex justify-center mt-20 relative z-10">
+      <div className="flex justify-center mt-12 sm:mt-20 relative z-10">
         <motion.button
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.8 }}
-          className="border border-blue-500 text-blue-400 hover:bg-blue-500 hover:text-white px-10 py-3 rounded-md font-semibold tracking-wider transition-all duration-300"
+          className="border border-blue-500 text-blue-400 hover:bg-blue-500 hover:text-white px-6 sm:px-10 py-2 sm:py-3 rounded-md font-semibold tracking-wider transition-all duration-300 text-sm sm:text-base"
         >
           KNOW MORE
         </motion.button>
