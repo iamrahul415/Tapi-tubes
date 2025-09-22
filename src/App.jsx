@@ -40,8 +40,6 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/about-us-detail" element={<AboutUsDetail />} />
         <Route path="/product" element={<ProductPage />} />
-        
-        {/* Dynamic Product Details Route */}
         <Route path="/product/:productId" element={<ProductDetails />} />
         <Route path="/CareerPage" element={<CareerPage />} />
         <Route path="/PeoplePage" element={<PeoplePage />} />

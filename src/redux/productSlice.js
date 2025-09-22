@@ -1,14 +1,17 @@
 //redux/productSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-// Initial state
+// Initial state - FIXED: Added missing selectedProduct states
 const initialState = {
   products: [],
+  selectedProduct: null,
   loading: false,
+  selectedProductLoading: false,
   error: null,
+  selectedProductError: null,
 };
 
-const BASE_URL="https://tapi-tubes-server.onrender.com";
+const BASE_URL = "https://tapi-tubes-server.onrender.com";
 
 // Async thunk for fetching products
 export const fetchProducts = createAsyncThunk(
@@ -16,13 +19,13 @@ export const fetchProducts = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await fetch(`${BASE_URL}/product`);
-
+      
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const result = await response.json();
-
+      
       if (!result.success) {
         throw new Error('API request failed');
       }
@@ -44,18 +47,17 @@ export const fetchProductById = createAsyncThunk(
       }
 
       const response = await fetch(`${BASE_URL}/product/${productId}`);
-
+      
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const result = await response.json();
-
+      
       if (!result.success) {
         throw new Error('API request failed');
       }
 
-      // Assuming the API returns a single product in the same format
       return result.data;
     } catch (error) {
       console.error('Fetch product by ID error:', error);
@@ -67,15 +69,34 @@ export const fetchProductById = createAsyncThunk(
 // Create the slice
 const productSlice = createSlice({
   name: 'products',
-  initialState,
+  initialState: {
+    products: [],
+    selectedProduct: null,
+    productsLoading: false,
+    selectedProductLoading: false,
+    productsError: null,
+    selectedProductError: null,
+    lastFetchedProductId: null, // Track the last fetched product ID
+  },
   reducers: {
-    // Synchronous reducers
     clearProducts: (state) => {
       state.products = [];
     },
     clearSelectedProduct: (state) => {
       state.selectedProduct = null;
+      state.selectedProductLoading = false;
       state.selectedProductError = null;
+      state.lastFetchedProductId = null;
+    },
+    // ✅ NEW: Action to clear product only when actually leaving product section
+    clearSelectedProductConditional: (state, action) => {
+      const { currentPath } = action.payload;
+      if (!currentPath.includes('/product/')) {
+        state.selectedProduct = null;
+        state.selectedProductLoading = false;
+        state.selectedProductError = null;
+        state.lastFetchedProductId = null;
+      }
     },
     clearError: (state) => {
       state.error = null;
@@ -87,6 +108,13 @@ const productSlice = createSlice({
       state.error = null;
       state.selectedProductError = null;
     },
+    prepareProductNavigation: (state, action) => {
+      const { productId } = action.payload;
+      if (state.lastFetchedProductId !== productId) {
+        state.selectedProductLoading = true;
+        state.selectedProductError = null;
+      }
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -113,20 +141,27 @@ const productSlice = createSlice({
         state.selectedProductLoading = false;
         state.selectedProduct = action.payload;
         state.selectedProductError = null;
+        state.lastFetchedProductId = action.payload._id;
       })
       .addCase(fetchProductById.rejected, (state, action) => {
         state.selectedProductLoading = false;
         state.selectedProductError = action.payload;
+        // Only clear product if there was actually an error
+        if (!state.selectedProduct) {
+          state.selectedProduct = null;
+        }
       });
   },
 });
 
-export const { 
-  clearProducts, 
-  clearSelectedProduct, 
-  clearError, 
+export const {
+  clearProducts,
+  clearSelectedProduct,
+  clearSelectedProductConditional,
+  prepareProductNavigation,
+  clearError,
   clearSelectedProductError,
-  clearAllErrors 
+  clearAllErrors
 } = productSlice.actions;
 
 export default productSlice.reducer;

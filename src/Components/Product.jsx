@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchProducts,
@@ -7,12 +7,11 @@ import {
   selectProductsLoading,
   selectProductsError,
 } from "../redux/productSlice";
-// eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 
 const Product = () => {
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const products = useSelector(selectProducts);
   const loading = useSelector(selectProductsLoading);
   const error = useSelector(selectProductsError);
@@ -20,6 +19,25 @@ const Product = () => {
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);
+
+  // ✅ FIX 1: Add debouncing to prevent double clicks
+  const lastClickTime = useRef(0);
+  
+  const handleDiscoverClick = (e, productId) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    // Debounce clicks - ignore clicks within 1 second of each other
+    const now = Date.now();
+    if (now - lastClickTime.current < 1000) {
+      console.log('Click ignored - too soon after previous click');
+      return;
+    }
+    lastClickTime.current = now;
+    
+    console.log('Discover button clicked for product:', productId);
+    navigate(`/product/${productId}`);
+  };
 
   if (loading) {
     return (
@@ -52,7 +70,7 @@ const Product = () => {
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-4xl sm:text-5xl font-semibold font-poppins tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600 text-left ml-[ ]"
+          className="text-4xl sm:text-5xl font-semibold font-poppins tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600 text-left"
         >
           PRODUCT
         </motion.h2>
@@ -80,17 +98,15 @@ const Product = () => {
                   alt={product.name}
                   className="w-full h-full object-cover"
                 />
-                <Link to={`/product/${product._id}`}>
-                  <motion.button
-                    className="absolute bottom-6 right-6 bg-blue-600/90 hover:bg-blue-500 px-5 py-2 text-white font-semibold rounded-md transition-all duration-300 shadow-lg z-20"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    Discover
-                  </motion.button>
-                </Link>
+                {/* ✅ FIX 2: Use button instead of Link for more control */}
+                <button
+                  onClick={(e) => handleDiscoverClick(e, product._id)}
+                  className="absolute bottom-6 right-6 bg-blue-600/90 hover:bg-blue-500 px-5 py-2 text-white font-semibold rounded-md transition-all duration-300 shadow-lg z-20 cursor-pointer"
+                >
+                  Discover
+                </button>
               </div>
-                <h3 className="mt-4 text-lg font-bold font-poppins text-white text-center leading-tight">
+              <h3 className="mt-4 text-lg font-bold font-poppins text-white text-center leading-tight">
                 {product.name}
               </h3>
             </motion.div>
@@ -123,15 +139,13 @@ const Product = () => {
                   alt={products[2].name}
                   className="w-full h-full object-cover"
                 />
-                <Link to={`/product/${products[2]._id}`}>
-                  <motion.button
-                    className="absolute bottom-6 right-6 bg-blue-600/90 hover:bg-blue-500 px-5 py-2 text-white font-semibold rounded-md transition-all duration-300 shadow-lg z-20"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    Discover
-                  </motion.button>
-                </Link>
+                {/* ✅ FIX 3: Use button for consistency */}
+                <button
+                  onClick={(e) => handleDiscoverClick(e, products[2]._id)}
+                  className="absolute bottom-6 right-6 bg-blue-600/90 hover:bg-blue-500 px-5 py-2 text-white font-semibold rounded-md transition-all duration-300 shadow-lg z-20 cursor-pointer"
+                >
+                  Discover
+                </button>
               </div>
               <h3 className="mt-4 text-lg font-bold font-poppins text-white text-center leading-tight">
                 {products[2].name}

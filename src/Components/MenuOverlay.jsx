@@ -13,7 +13,7 @@ function MenuOverlay({ open, onClose }) {
     {
       number: "02",
       label: "Products",
-      to: "/Product",
+      to: "/product",
       sub: ["Round Tube", "Square Tube", "Rectangle Tube"],
     },
     {
@@ -130,7 +130,7 @@ function MenuOverlay({ open, onClose }) {
               href="mailto:contact@tapitubes.com"
               className="flex items-center justify-center lg:justify-start gap-2 text-[#405FFC]"
             >
-              <img src="/assets/Email.png" alt="email" /> contact@tapitubes.com
+              <img src="../assets/Email.png" alt="email" /> contact@tapitubes.com
             </a>
             <a
               href="tel:181144421145"
@@ -144,7 +144,7 @@ function MenuOverlay({ open, onClose }) {
               rel="noreferrer"
               className="flex items-center justify-center lg:justify-start gap-2 text-[#405FFC]"
             >
-              <img src="/assets/whatsApp.png" alt="whatsapp" /> +91 9874563210
+              <img src="../assets/whatsApp.png" alt="whatsapp" /> +91 9874563210
             </a>
           </div>
 

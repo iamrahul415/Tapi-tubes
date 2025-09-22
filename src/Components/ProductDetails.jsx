@@ -1,5 +1,5 @@
 // Pages/ProductDetails.jsx
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback, useMemo, useRef } from "react";
 import { useParams, Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -7,12 +7,13 @@ import {
   selectSelectedProduct,
   selectSelectedProductLoading,
   selectSelectedProductError,
-  clearSelectedProduct,
-} from "../redux/productSlice"; // adjust path as needed
+  clearSelectedProductConditional,
+} from "../redux/productSlice";
 
 import SendEnquiry from "@/Components/SendEnquiry";
+
 // Product Hero Component
-const ProductHero = ({ title, heroImage, heroAlt }) => {
+const ProductHero = React.memo(({ title, heroImage, heroAlt }) => {
   return (
     <section className="relative w-full h-[50vh] sm:h-[80vh] md:h-[90vh] flex items-center justify-center overflow-hidden">
       {/* Background Image */}
@@ -36,23 +37,31 @@ const ProductHero = ({ title, heroImage, heroAlt }) => {
       </h1>
     </section>
   );
-};
+});
+
+ProductHero.displayName = 'ProductHero';
 
 // Product Description Component
-const ProductPara = ({ description }) => {
+const ProductPara = React.memo(({ description }) => {
+  const paragraphs = useMemo(() => {
+    return Array.isArray(description) ? description : description.split('\\n');
+  }, [description]);
+
   return (
     <section className="w-full bg-black text-white py-12 sm:py-16 px-4 sm:px-6 md:px-12 lg:px-20">
       <div className="max-w-5xl mx-auto space-y-6 text-left sm:text-justify leading-relaxed sm:leading-loose text-base font-poppins sm:text-lg md:text-xl">
-        {description.map((paragraph, index) => (
+        {paragraphs.map((paragraph, index) => (
           <p key={index}>{paragraph}</p>
         ))}
       </div>
     </section>
   );
-};
+});
+
+ProductPara.displayName = 'ProductPara';
 
 // Product Benefits Component
-const ProductBenefit = ({ benefits, benefitImages }) => {
+const ProductBenefit = React.memo(({ benefits, benefitImages }) => {
   return (
     <section className="w-full bg-black text-white py-16 px-6 md:px-20">
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-stretch">
@@ -96,10 +105,12 @@ const ProductBenefit = ({ benefits, benefitImages }) => {
       </div>
     </section>
   );
-};
+});
+
+ProductBenefit.displayName = 'ProductBenefit';
 
 // Product Applications Component
-const ProductApplication = ({ applications }) => {
+const ProductApplication = React.memo(({ applications }) => {
   return (
     <section className="w-full bg-black text-white py-16 px-6 md:px-20">
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-stretch relative">
@@ -132,40 +143,101 @@ const ProductApplication = ({ applications }) => {
       </div>
     </section>
   );
-};
+});
+
+ProductApplication.displayName = 'ProductApplication';
 
 // Main ProductDetails Component
 function ProductDetails() {
   const { productId } = useParams();
   const dispatch = useDispatch();
+  const hasTriedRedirect = useRef(false);
 
   const productData = useSelector(selectSelectedProduct);
   const loading = useSelector(selectSelectedProductLoading);
   const error = useSelector(selectSelectedProductError);
 
+  // ✅ FIX 1: Fetch product data first
   useEffect(() => {
-    if (productId) {
+    console.log('useEffect triggered - productId:', productId);
+    console.log('Current productData?.id:', productData?._id);
+    
+    if (productId && (!productData || productData._id !== productId)) {
+      console.log('Fetching product data for:', productId);
       dispatch(fetchProductById(productId));
+      hasTriedRedirect.current = false; // Reset redirect flag
     }
+  }, [productId, productData?._id, dispatch]);
+
+  // ✅ FIX 2: Better cleanup that checks the current path
+  useEffect(() => {
     return () => {
-      dispatch(clearSelectedProduct());
+      const currentPath = window.location.pathname;
+      console.log('Cleanup triggered, current path:', currentPath);
+      
+      dispatch(clearSelectedProductConditional({ currentPath }));
     };
-  }, [dispatch, productId]);
+  }, [dispatch]);
+
+  // ✅ FIX 3: Memoize computed values to prevent unnecessary re-renders
+  const processedBenefits = useMemo(() => {
+    return productData?.benefits?.map(b => ({ 
+      title: b.point, 
+      description: b.description || "" 
+    })) || [];
+  }, [productData?.benefits]);
+
+  const processedApplications = useMemo(() => {
+    return {
+      title: "Applications",
+      items: productData?.applications?.map(a => ({ 
+        title: a.point, 
+        description: a.description || "" 
+      })) || [],
+      image: productData?.extraImages?.[1]?.url || "",
+      imageAlt: "Application Image",
+    };
+  }, [productData?.applications, productData?.extraImages]);
+
+  const benefitImages = useMemo(() => ({
+    primary: productData?.extraImages?.[0]?.url,
+  }), [productData?.extraImages]);
 
   // Show loading state
   if (loading) {
-    return <div className="w-full min-h-screen flex items-center justify-center text-white">Loading product details…</div>;
+    return (
+      <div className="w-full min-h-screen flex items-center justify-center text-white bg-black">
+        <div className="text-xl">Loading product details…</div>
+      </div>
+    );
   }
 
-  // Show error state
+  // Show error state and redirect
   if (error) {
-    return <div className="w-full min-h-screen flex items-center justify-center text-red-600">Error loading product: {error}</div>;
-  }
-
-  // Redirect if no product found
-  if (!productData) {
+    console.log('Product fetch failed with error, redirecting:', error);
     return <Navigate to="/product" replace />;
   }
+
+  // Wait for data to load - don't redirect immediately
+  if (!productData && productId) {
+    return (
+      <div className="w-full min-h-screen flex items-center justify-center text-white bg-black">
+        <div className="text-xl">Loading product details…</div>
+      </div>
+    );
+  }
+
+  // Only redirect if we have no productId (invalid URL)
+  if (!productId) {
+    return <Navigate to="/product" replace />;
+  }
+
+  // Don't render if we don't have product data yet
+  if (!productData) {
+    return null;
+  }
+
+  console.log('Rendering ProductDetails with data:', productData._id);
 
   return (
     <div className="w-full min-h-screen text-white">
@@ -174,23 +246,15 @@ function ProductDetails() {
         heroImage={productData.mainImage?.url}
         heroAlt={productData.name}
       />
-      <ProductPara description={productData.description.split('\\n')} />
+      
+      <ProductPara description={productData.description} />
 
       <ProductBenefit
-        benefits={productData.benefits.map(b => ({ title: b.point, description: b.description || "" }))}
-        benefitImages={{
-          primary: productData.extraImages?.[0]?.url,
-        }}
+        benefits={processedBenefits}
+        benefitImages={benefitImages}
       />
 
-      <ProductApplication
-        applications={{
-          title: "Applications",
-          items: productData.applications.map(a => ({ title: a.point, description: a.description || "" })),
-          image: productData.extraImages?.[1]?.url || "",
-          imageAlt: "Application Image",
-        }}
-      />
+      <ProductApplication applications={processedApplications} />
 
       {productData.showEnquiry && <SendEnquiry />}
     </div>

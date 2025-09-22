@@ -12,7 +12,7 @@ const PeopleHero = () => {
       <h1
         className="relative text-2xl sm:text-4xl md:text-6xl font-bold font-poppins text-[#405FFC] text-center mb-16 sm:mb-[10rem]"
       >
-        Welcome to our team
+        Meet The Bright Minds
       </h1>
     </section>
   );
