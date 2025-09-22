@@ -179,8 +179,7 @@ function ProductDetails() {
       <ProductBenefit
         benefits={productData.benefits.map(b => ({ title: b.point, description: b.description || "" }))}
         benefitImages={{
-          primary: productData.mainImage?.url,
-          secondary: productData.extraImages?.[0]?.url,
+          primary: productData.extraImages?.[0]?.url,
         }}
       />
 
