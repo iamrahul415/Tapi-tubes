@@ -1,5 +1,5 @@
 import { useState } from "react";
-import emailjs from '@emailjs/browser';
+import emailjs from "@emailjs/browser";
 
 const SendEnquiry = () => {
   const [loading, setLoading] = useState(false);
@@ -10,15 +10,12 @@ const SendEnquiry = () => {
     setLoading(true);
     setStatus("");
 
-    const fd = new FormData(e.target);
-    console.log("Company:", fd.get("company"));
-    console.log("Message:", fd.get("message"));
-
-    emailjs.sendForm(
-      import.meta.env.VITE_EMAILJS_SERVICE_ID,
-      import.meta.env.VITE_EMAILJS_TEMPLATE_ID,     
-      e.target,
-      import.meta.env.VITE_EMAILJS_PUBLIC_KEY    
+    emailjs
+      .sendForm(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID2,
+        e.target,
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
       )
       .then(
         () => {
@@ -73,10 +70,7 @@ const SendEnquiry = () => {
 
       {/* Right Side (Form) */}
       <div className="flex justify-start items-start bg-black p-8">
-        <form
-          onSubmit={handleSubmit}
-          className="w-full max-w-md space-y-4"
-        >
+        <form onSubmit={handleSubmit} className="w-full max-w-md space-y-4">
           <h3 className="text-xl font-normal font-poppins text-[#405FFC] mb-2">
             Fill in your details below and click submit
           </h3>
@@ -136,9 +130,7 @@ const SendEnquiry = () => {
           </button>
 
           {status && (
-            <p className="text-sm mt-2 text-center text-[#405FFC]">
-              {status}
-            </p>
+            <p className="text-sm mt-2 text-center text-[#405FFC]">{status}</p>
           )}
         </form>
       </div>

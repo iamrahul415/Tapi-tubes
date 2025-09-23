@@ -2,12 +2,13 @@ import React, { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-// Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger);
 
 const Newsroom = () => {
   const years = [2019, 2020, 2021, 2022, 2023, 2024, 2025];
-  const [activeIndex, setActiveIndex] = useState(6); // Start with 2025 (latest)
+  const [activeIndex, setActiveIndex] = useState(years.length - 1); // Start with latest year
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+
   const sectionRef = useRef(null);
   const yearRef = useRef(null);
   const shapeRef = useRef(null);
@@ -15,6 +16,16 @@ const Newsroom = () => {
   const contentItemsRef = useRef([]);
   const isAnimating = useRef(false);
 
+  // 📏 Track window size for responsive shape
+  useEffect(() => {
+    const updateSize = () =>
+      setDimensions({ width: window.innerWidth, height: window.innerHeight });
+    updateSize();
+    window.addEventListener("resize", updateSize);
+    return () => window.removeEventListener("resize", updateSize);
+  }, []);
+
+  // 📰 News Data
   const newsData = {
     2019: [
       {
@@ -22,6 +33,12 @@ const Newsroom = () => {
           "Tapi Tubes establishes advanced manufacturing capabilities with state-of-the-art technology",
         location: "Mumbai",
         date: "December 2019",
+      },
+      {
+        title:
+          "Strategic partnership with leading infrastructure companies announced for nationwide expansion",
+        location: "Delhi",
+        date: "June 2020",
       },
       {
         title: "Strategic expansion into new market segments across India",
@@ -163,41 +180,27 @@ const Newsroom = () => {
       },
     });
 
-    // Animate year change
-    tl.to(yearRef.current, {
-      scale: 0.9,
-      opacity: 0.7,
-      duration: 0.3,
-      ease: "power2.in",
-    })
-      .set(yearRef.current, {
-        textContent: years[newIndex],
-      })
-      .to(yearRef.current, {
-        scale: 1,
-        opacity: 1,
-        duration: 0.4,
-        ease: "back.out(1.7)",
-      });
+    // Animate year text
+   tl.to(yearRef.current)
+  .to(yearRef.current, {
+    scale: 1,
+    opacity: 1,
+    duration: 0.4,
+    ease: "back.out(1.7)",
+  });
+
 
     // Animate shape
-    tl.to(
-      shapeRef.current,
-      {
-        scaleX: 0.8,
-        duration: 0.3,
-        ease: "power2.in",
-      },
-      0
-    ).to(shapeRef.current, {
+    tl.to(shapeRef.current, {
       scaleX: 1,
       duration: 0.4,
       ease: "back.out(1.7)",
     });
 
-    // Content animation
+    // Animate content
+    const items = contentItemsRef.current.filter(Boolean);
     tl.to(
-      contentItemsRef.current.filter(Boolean),
+      items,
       {
         opacity: 0,
         x: 30,
@@ -207,7 +210,7 @@ const Newsroom = () => {
       },
       0
     ).to(
-      contentItemsRef.current.filter(Boolean),
+      items,
       {
         opacity: 1,
         x: 0,
@@ -219,9 +222,11 @@ const Newsroom = () => {
     );
   };
 
+  // 🎬 ScrollTrigger setup
   useEffect(() => {
+    if (!sectionRef.current) return;
+
     const ctx = gsap.context(() => {
-      // ScrollTrigger for year changes
       ScrollTrigger.create({
         trigger: sectionRef.current,
         start: "top top",
@@ -236,22 +241,16 @@ const Newsroom = () => {
           const segmentSize = 1 / years.length;
           let newIndex = Math.floor(progress / segmentSize);
 
-          // Reverse the index to start from latest year
           newIndex =
-            years.length -
-            1 -
+            years.length - 1 -
             Math.max(0, Math.min(newIndex, years.length - 1));
 
-          if (newIndex !== activeIndex) {
-            animateToYear(newIndex);
-          }
+          if (newIndex !== activeIndex) animateToYear(newIndex);
         },
       });
 
       // Initial entrance animations
-      const entranceTL = gsap.timeline();
-
-      entranceTL
+      gsap.timeline()
         .fromTo(
           yearRef.current,
           { scale: 0.8, opacity: 0 },
@@ -274,7 +273,7 @@ const Newsroom = () => {
     return () => ctx.revert();
   }, [activeIndex, years.length]);
 
-  // Update content when activeIndex changes
+  // Update content animations when active year changes
   useEffect(() => {
     const items = contentItemsRef.current.filter(Boolean);
     if (items.length > 0 && !isAnimating.current) {
@@ -296,49 +295,50 @@ const Newsroom = () => {
   const currentYearData = newsData[years[activeIndex]];
   const activeYear = years[activeIndex];
 
+  // 📐 Responsive shape size
+  const shapeStyle = (() => {
+    const w = dimensions.width;
+    if (w < 768) return { width: "280px", height: "200px", left: "-10px" };
+    if (w < 1024) return { width: "350px", height: "250px", left: "-40px" };
+    return { width: "450px", height: "300px" };
+  })();
+
   return (
     <section
       ref={sectionRef}
       className="relative w-full h-screen bg-black text-white overflow-hidden"
     >
       {/* Header */}
-      <div className="absolute top-8 md:top-12 left-1/2 transform -translate-x-1/2 z-20">
-        <h1 className="text-xl md:text-2xl lg:text-3xl font-light tracking-[0.3em] md:tracking-[0.4em] text-[#405FFC] uppercase">
+      <div className="absolute top-8 md:top-12 left-1/2 -translate-x-1/2 z-20">
+        <h1 className="text-xl md:text-2xl lg:text-3xl font-medium tracking-[0.3em] md:tracking-[0.4em] text-[#405FFC] uppercase">
           Newsroom
         </h1>
       </div>
 
       <div className="relative z-10 flex h-full items-center justify-center">
         <div className="w-full max-w-7xl px-4 md:px-8 flex flex-col lg:flex-row lg:gap-[7.75rem] items-center">
-          {/* Left side - Year with geometric shape */}
+          {/* Left side - Year with shape */}
           <div className="flex-none relative mb-8 lg:mb-0 lg:mr-16">
-            {/* Geometric shape background */}
             <div
               ref={shapeRef}
-              className="absolute inset-0 bg-[#405FFC] transform -skew-x-10"
+              className="absolute inset-0 bg-[#405FFC]"
               style={{
-                width: window.innerWidth < 768 ? "280px" : window.innerWidth < 1024 ? "350px" : "430px",
-                height: window.innerWidth < 768 ? "200px" : window.innerWidth < 1024 ? "250px" : "300px",
-                left: window.innerWidth < 768 ? "-30px" : window.innerWidth < 1024 ? "-40px" : "-50px",
+                ...shapeStyle,
                 top: "50%",
                 transform: "translateY(-50%) skewX(-15deg)",
               }}
             />
-
-            {/* Year text */}
             <div
               className="relative z-10 flex items-center justify-center"
-              style={{ 
-                width: window.innerWidth < 768 ? "220px" : window.innerWidth < 1024 ? "270px" : "300px", 
-                height: window.innerWidth < 768 ? "280px" : window.innerWidth < 1024 ? "340px" : "400px" 
+              style={{
+                width: shapeStyle.width,
+                height: `calc(${shapeStyle.height} + 80px)`,
               }}
             >
               <span
                 ref={yearRef}
                 className="text-6xl md:text-8xl lg:text-[10rem] xl:text-[12rem] font-bold text-white leading-none select-none"
-                style={{
-                  textShadow: "0 4px 30px rgba(0,0,0,0.3)",
-                }}
+                style={{ textShadow: "0 4px 30px rgba(0,0,0,0.3)" }}
               >
                 {activeYear}
               </span>
@@ -348,28 +348,33 @@ const Newsroom = () => {
           {/* Right side - Content */}
           <div ref={contentRef} className="flex-1 max-w-3xl w-full">
             <div className="space-y-6 md:space-y-8 lg:space-y-12">
-              {currentYearData?.map((item, idx) => (
-                <div
-                  key={`${activeYear}-${idx}`}
-                  ref={(el) => (contentItemsRef.current[idx] = el)}
-                  className="group cursor-pointer transition-all duration-300"
-                >
-                  <h3 className="text-base md:text-lg lg:text-xl xl:text-2xl font-normal text-white mb-3 md:mb-4 lg:mb-6 leading-relaxed group-hover:text-[#405FFC] transition-colors duration-300">
-                    {item.title}
-                  </h3>
-                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-8 text-xs md:text-sm">
-                    <span className="text-[#405FFC] font-medium">
-                      {item.location}
-                    </span>
-                    <span className="text-[#405FFC] font-medium">
-                      {item.date}
-                    </span>
+              {(() => {
+                contentItemsRef.current = []; // 🔥 reset refs on every render
+                return currentYearData?.map((item, idx) => (
+                  <div
+                    key={`${activeYear}-${idx}`}
+                    ref={(el) => {
+                      if (el) contentItemsRef.current[idx] = el;
+                    }}
+                    className="group cursor-pointer transition-all duration-300"
+                  >
+                    <h3 className="text-base md:text-lg lg:text-xl xl:text-2xl font-normal mb-3 md:mb-4 lg:mb-6 leading-relaxed group-hover:text-[#405FFC] transition-colors duration-300">
+                      {item.title}
+                    </h3>
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-8 text-xs md:text-sm">
+                      <span className="text-[#405FFC] font-medium">
+                        {item.location}
+                      </span>
+                      <span className="text-[#405FFC] font-medium">
+                        {item.date}
+                      </span>
+                    </div>
+                    {idx < currentYearData.length - 1 && (
+                      <div className="mt-4 md:mt-6 lg:mt-8 h-px bg-gradient-to-r from-gray-700 via-gray-600 to-transparent"></div>
+                    )}
                   </div>
-                  {idx < currentYearData.length - 1 && (
-                    <div className="mt-4 md:mt-6 lg:mt-8 h-px bg-gradient-to-r from-gray-700 via-gray-600 to-transparent"></div>
-                  )}
-                </div>
-              ))}
+                ));
+              })()}
             </div>
           </div>
         </div>

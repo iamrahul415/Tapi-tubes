@@ -1,14 +1,14 @@
 // src/features/blogs/blogsSlice.js
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-const BASE_URL = 'https://tapi-tubes-server.onrender.com';
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 // Helper for API calls
 const apiCall = async (url, options = {}) => {
   const response = await fetch(`${BASE_URL}${url}`, {
     ...options,
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       ...options.headers,
     },
   });
@@ -20,7 +20,9 @@ const apiCall = async (url, options = {}) => {
     } catch {
       errorData = {};
     }
-    throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+    throw new Error(
+      errorData.message || `HTTP error! status: ${response.status}`
+    );
   }
 
   return response.json();
@@ -28,10 +30,10 @@ const apiCall = async (url, options = {}) => {
 
 // Thunks
 export const getAllBlogs = createAsyncThunk(
-  'blogs/getAll',
+  "blogs/getAll",
   async (_, { rejectWithValue }) => {
     try {
-      const result = await apiCall('/blog');
+      const result = await apiCall("/blog");
       return result.data;
     } catch (err) {
       return rejectWithValue(err.message);
@@ -40,7 +42,7 @@ export const getAllBlogs = createAsyncThunk(
 );
 
 export const getBlogById = createAsyncThunk(
-  'blogs/getById',
+  "blogs/getById",
   async (blogId, { rejectWithValue }) => {
     try {
       const result = await apiCall(`/blog/${blogId}`);
@@ -60,7 +62,7 @@ const initialState = {
 };
 
 const blogsSlice = createSlice({
-  name: 'blogs',
+  name: "blogs",
   initialState,
   reducers: {
     clearCurrentBlog(state) {

@@ -34,21 +34,13 @@ const Product = () => {
     navigate(`/product/${productId}`);
   };
 
+ // Loading state
   if (loading) {
     return (
-      <section className="w-full min-h-screen bg-black text-white px-4 sm:px-6 md:px-12 py-10">
-        <div className="mb-5">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold font-poppins tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600 text-left">
-            PRODUCT
-          </h2>
-        </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-12 relative max-w-7xl mx-auto">
-          {[...Array(3)].map((_, i) => (
-            <div
-              key={i}
-              className="w-full h-56 sm:h-72 bg-gray-700/50 rounded-xl mx-auto animate-pulse"
-            ></div>
-          ))}
+      <section className="bg-black text-white px-4 py-12 md:px-12 flex flex-col items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <p className="text-xl">Loading products...</p>
         </div>
       </section>
     );

@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 // Initial state
 const initialState = {
@@ -6,10 +6,10 @@ const initialState = {
   loading: false,
   error: null,
 };
-const BASE_URL= "https://tapi-tubes-server.onrender.com"
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 // Async thunk for fetching team members
 export const fetchTeamMembers = createAsyncThunk(
-  'team/fetchTeamMembers',
+  "team/fetchTeamMembers",
   async (_, { rejectWithValue }) => {
     try {
       const response = await fetch(`${BASE_URL}/team`);
@@ -21,19 +21,19 @@ export const fetchTeamMembers = createAsyncThunk(
       const result = await response.json();
 
       if (!result.success) {
-        throw new Error('API request failed');
+        throw new Error("API request failed");
       }
 
       return result.data;
     } catch (error) {
-      return rejectWithValue(error.message || 'Failed to fetch team members');
+      return rejectWithValue(error.message || "Failed to fetch team members");
     }
   }
 );
 
 // Create the slice
 const personSlice = createSlice({
-  name: 'team',
+  name: "team",
   initialState,
   reducers: {
     // Synchronous reducers
