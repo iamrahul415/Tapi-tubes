@@ -180,16 +180,6 @@ const Newsroom = () => {
       },
     });
 
-    // Animate year text
-   tl.to(yearRef.current)
-  .to(yearRef.current, {
-    scale: 1,
-    opacity: 1,
-    duration: 0.4,
-    ease: "back.out(1.7)",
-  });
-
-
     // Animate shape
     tl.to(shapeRef.current, {
       scaleX: 1,
@@ -242,7 +232,8 @@ const Newsroom = () => {
           let newIndex = Math.floor(progress / segmentSize);
 
           newIndex =
-            years.length - 1 -
+            years.length -
+            1 -
             Math.max(0, Math.min(newIndex, years.length - 1));
 
           if (newIndex !== activeIndex) animateToYear(newIndex);
@@ -250,7 +241,8 @@ const Newsroom = () => {
       });
 
       // Initial entrance animations
-      gsap.timeline()
+      gsap
+        .timeline()
         .fromTo(
           yearRef.current,
           { scale: 0.8, opacity: 0 },
@@ -298,7 +290,7 @@ const Newsroom = () => {
   // 📐 Responsive shape size
   const shapeStyle = (() => {
     const w = dimensions.width;
-    if (w < 768) return { width: "280px", height: "200px", left: "-10px" };
+    if (w < 768) return { width: "280px", height: "200px"};
     if (w < 1024) return { width: "350px", height: "250px", left: "-40px" };
     return { width: "450px", height: "300px" };
   })();
@@ -318,7 +310,7 @@ const Newsroom = () => {
       <div className="relative z-10 flex h-full items-center justify-center">
         <div className="w-full max-w-7xl px-4 md:px-8 flex flex-col lg:flex-row lg:gap-[7.75rem] items-center">
           {/* Left side - Year with shape */}
-          <div className="flex-none relative mb-8 lg:mb-0 lg:mr-16">
+          <div className="flex-none relative mb-[-2rem] lg:mb-0 lg:mr-16">
             <div
               ref={shapeRef}
               className="absolute inset-0 bg-[#405FFC]"
