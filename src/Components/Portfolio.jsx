@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import product1 from "/assets/Product1Img.jpg";
 import product2 from "/assets/Product2Img.png";
 import product3 from "/assets/Product3Img.jpg";
+import { Link } from "react-router-dom";
 
 export default function Portfolio() {
   const products = [
