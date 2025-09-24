@@ -7,11 +7,11 @@ function MenuOverlay({ open, onClose }) {
     if (open) {
       document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = "";
+      document.body.style.overflow = "hidden";
     }
 
     return () => {
-      document.body.style.overflow = "";
+      document.body.style.overflow = "hidden";
     };
   }, [open]);
 
@@ -67,7 +67,7 @@ function MenuOverlay({ open, onClose }) {
   const rightLinks = allLinks.slice(5);
 
   return (
-    <div className="fixed inset-0 bg-black text-white z-50 overflow-auto">
+    <div className="fixed inset-0 bg-black text-white z-50 overflow-hidden">
       {/* Header: Logo + Close */}
       <div className="flex justify-between items-center p-4 sm:p-6">
         <Link to="/" onClick={onClose}>
@@ -111,7 +111,7 @@ function MenuOverlay({ open, onClose }) {
                             <span className="opacity-0 group-hover:opacity-100 text-[#405FFC] transition-opacity duration-300 text-sm">
                               /
                             </span>
-                            <span className="text-lg font-bold font-poppins tracking-[0.1em]">
+                            <span className="text-[20px] font-bold font-poppins tracking-[0.1em]">
                               {link.label}
                             </span>
                           </div>
@@ -119,7 +119,7 @@ function MenuOverlay({ open, onClose }) {
                           {/* Sub-links - Always Visible */}
                           {link.sub && (
                             <div className="mt-1 ml-4">
-                              <div className="flex flex-col gap-1 text-xs text-gray-400">
+                              <div className="flex flex-col gap-1 text-[16px] text-gray-400">
                                 {link.sub.map((sublink, i) => (
                                   <span
                                     key={i}
@@ -143,21 +143,21 @@ function MenuOverlay({ open, onClose }) {
             <div className="w-40 flex flex-col gap-8">
               {/* Contact Information */}
               <div>
-                <h3 className="text-sm font-semibold mb-4 text-[#405FFC]">Contact</h3>
+                <h3 className="text-[20px] font-bold mb-4 text-[#405FFC]">Contact</h3>
                 <div className="flex flex-col gap-3">
                   <a
                     href="mailto:contact@tapitubes.com"
                     className="flex items-center gap-2 text-[#405FFC] hover:text-white transition-colors duration-300"
                   >
                     <img src="../assets/Email.png" alt="email" className="w-4 h-4" />
-                    <span className="text-xs leading-tight">contact@tapitubes.com</span>
+                    <span className="text-[16px] leading-tight">contact@tapitubes.com</span>
                   </a>
                   <a
                     href="tel:181144421145"
                     className="flex items-center gap-2 text-[#405FFC] hover:text-white transition-colors duration-300"
                   >
                     <img src="/assets/Call.png" alt="call" className="w-4 h-4" />
-                    <span className="text-xs">+91 9876543210</span>
+                    <span className="text-[16px]">+91 9876543210</span>
                   </a>
                   <a
                     href="https://wa.me/919123931313"
@@ -166,14 +166,14 @@ function MenuOverlay({ open, onClose }) {
                     className="flex items-center gap-2 text-[#405FFC] hover:text-white transition-colors duration-300"
                   >
                     <img src="../assets/whatsApp.png" alt="whatsapp" className="w-4 h-4" />
-                    <span className="text-xs">+91 9874563210</span>
+                    <span className="text-[16px]">+91 9874563210</span>
                   </a>
                 </div>
               </div>
 
               {/* Social Icons */}
               <div>
-                <h3 className="text-sm font-semibold mb-4 text-[#405FFC]">Follow Us</h3>
+                <h3 className="text-[20px] font-bold mb-4 text-[#405FFC]">Follow Us</h3>
                 <div className="flex gap-3 flex-wrap">
                   <img 
                     src="/assets/FbIcon.png" 
