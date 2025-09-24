@@ -37,10 +37,10 @@ const PressReleaseMain = () => {
 
   if (loading) {
     return (
-      <div className="w-full min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
+      <div className="w-full min-h-screen bg-black flex items-center justify-center">
         <div className="flex flex-col items-center space-y-4">
           <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
-          <p className="text-white/80 text-lg font-medium">Loading articles...</p>
+          <p className="text-[#405FFC] text-lg font-medium">Loading articles...</p>
         </div>
       </div>
     );
@@ -53,8 +53,8 @@ const PressReleaseMain = () => {
           <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
             <X className="w-8 h-8 text-red-400" />
           </div>
-          <h2 className="text-2xl font-bold text-white mb-2">Something went wrong</h2>
-          <p className="text-red-300">Error loading articles: {error}</p>
+          <h2 className="text-2xl font-bold text-[#405FFC] mb-2">Something went wrong</h2>
+          <p className="text-red-400">Error loading articles: {error}</p>
         </div>
       </div>
     );
@@ -91,7 +91,7 @@ const PressReleaseMain = () => {
                 </div>
 
                 {/* Title */}
-                <h3 className="text-white text-lg font-semibold leading-tight mb-6 group-hover:text-blue-400 transition-colors duration-300 line-clamp-3">
+                <h3 className="text-white text-lg font-semibold leading-tight mb-6 group-hover:text-blue-500 transition-colors duration-300 line-clamp-3">
                   {blog.title}
                 </h3>
 

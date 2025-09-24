@@ -5,12 +5,12 @@ function Search({ open, onClose }) {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/95 flex flex-col items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black/100 flex flex-col items-center justify-center z-50">
       {/* Header: Logo + Close Button */}
       <div className="absolute top-6 left-6">
         <Link to="/" onClick={onClose}>
           <img
-            src="@/assets/Logo.png"
+            src="../assets/Logo.png"
             alt="companyLogo"
             width={81}
             height={48}

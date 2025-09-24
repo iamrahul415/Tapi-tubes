@@ -12,10 +12,10 @@ const JoinUs = () => {
 
     emailjs
       .sendForm(
-      // import.meta.env.VITE_EMAILJS_SERVICE_ID,
-      // import.meta.env.VITE_EMAILJS_TEMPLATE_ID2,     
-      e.target,
-      // import.meta.env.VITE_EMAILJS_PUBLIC_KEY  
+        import.meta.env.VITE_EMAILJS_SERVICE_ID2,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID3,
+        e.target,
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY2
       )
       .then(
         () => {
@@ -103,17 +103,14 @@ const JoinUs = () => {
           {/* Resume Upload */}
           <div>
             <label className="block text-sm mb-1 text-gray-300">
-              Upload Resume (PDF or Image)
+              Resume Link (Google Drive, Dropbox, etc.)
             </label>
             <input
-              type="file"
-              name="resume" 
-              accept=".pdf,image/*"
+              type="url"
+              name="resume_link"
+              placeholder="Paste your resume link here"
               required
-              className="w-full p-2 rounded-md bg-transparent border border-[#405FFC] 
-                         file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 
-                         file:text-sm file:font-semibold file:bg-blue-600 file:text-white 
-                         hover:file:bg-blue-700"
+              className="w-full p-5 rounded-md bg-transparent border border-[#405FFC] focus:border-blue-900 outline-none"
             />
           </div>
 

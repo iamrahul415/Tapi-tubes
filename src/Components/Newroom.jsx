@@ -263,7 +263,7 @@ const Newsroom = () => {
     }, sectionRef);
 
     return () => ctx.revert();
-  }, [activeIndex, years.length]);
+  }, [activeIndex, animateToYear, years.length]);
 
   // Update content animations when active year changes
   useEffect(() => {
@@ -290,7 +290,7 @@ const Newsroom = () => {
   // 📐 Responsive shape size
   const shapeStyle = (() => {
     const w = dimensions.width;
-    if (w < 768) return { width: "280px", height: "200px"};
+    if (w < 768) return { width: "280px", height: "200px" };
     if (w < 1024) return { width: "350px", height: "250px", left: "-40px" };
     return { width: "450px", height: "300px" };
   })();
