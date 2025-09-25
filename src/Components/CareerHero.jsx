@@ -1,11 +1,18 @@
 const CareerHero = () => {
   return (
     <section className="relative w-full h-[75vh] sm:h-[80vh] md:h-[90vh] overflow-hidden">
-      {/* Background Image */}
+      {/* Background Image - Mobile */}
+      <img
+        src="/assets/CareerMobImg.png"
+        alt="Career Hero Mobile"
+        className="absolute inset-0 w-full h-full object-cover sm:hidden"
+      />
+
+      {/* Background Image - Tablet/Desktop */}
       <img
         src="/assets/JobImg.png"
         alt="Career Hero"
-        className="absolute inset-0 w-full h-full object-fill"
+        className="absolute inset-0 w-full h-full object-cover hidden sm:block"
       />
 
       {/* Text Content - Bottom Left */}

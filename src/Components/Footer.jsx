@@ -1,4 +1,10 @@
+import { useNavigate } from 'react-router-dom';
+
+
+
 export default function Footer() {
+  const navigate = useNavigate();
+
   return (
     <div className="w-full bg-[#000000] text-white px-6 sm:px-10 md:px-20 py-12">
       {/* Top Row: Logo + Social + Newsletter */}
@@ -58,8 +64,18 @@ export default function Footer() {
         <div>
           <h3 className="text-[#405FFC] font-semibold mb-4">COMPANY</h3>
           <ul className="space-y-2 text-sm">
-            <li className="cursor-pointer">About us</li>
-            <li className="cursor-pointer">Team</li>
+            <li 
+              className="cursor-pointer hover:text-[#405FFC] transition-colors"
+              onClick={() => navigate('/AboutUsDetail')}
+            >
+              About us
+            </li>
+            <li 
+              className="cursor-pointer hover:text-[#405FFC] transition-colors"
+              onClick={() => navigate('/PeoplePage')}
+            >
+              Team
+            </li>
             <li className="cursor-pointer">Location</li>
           </ul>
         </div>
@@ -68,7 +84,12 @@ export default function Footer() {
         <div>
           <h3 className="text-[#405FFC] font-semibold mb-4">PORTFOLIO</h3>
           <ul className="space-y-2 text-sm">
-            <li className="cursor-pointer">Products</li>
+            <li 
+              className="cursor-pointer hover:text-[#405FFC] transition-colors"
+              onClick={() => navigate('/Product')}
+            >
+              Products
+            </li>
             <li className="cursor-pointer">Application</li>
             <li className="cursor-pointer">Steel Making Process</li>
           </ul>
@@ -78,7 +99,12 @@ export default function Footer() {
         <div>
           <h3 className="text-[#405FFC] font-semibold mb-4">NEWSROOM</h3>
           <ul className="space-y-2 text-sm">
-            <li className="cursor-pointer">Press Releases</li>
+            <li 
+              className="cursor-pointer hover:text-[#405FFC] transition-colors"
+              onClick={() => navigate('/PressReleasePage')}
+            >
+              Press Releases
+            </li>
           </ul>
         </div>
 

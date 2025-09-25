@@ -1,11 +1,18 @@
 const PressReleaseHero = () => {
   return (
     <section className="relative w-full h-[75vh] sm:h-[80vh] md:h-[90vh] flex items-center justify-start overflow-hidden">
-      {/* Background Image */}
+      {/* Background Image - Mobile */}
+      <img
+        src="/assets/PressMobImg.png"
+        alt="Career Hero Mobile"
+        className="absolute inset-0 w-full h-full object-cover sm:hidden"
+      />
+
+      {/* Background Image - Tablet/Desktop */}
       <img
         src="/assets/PressHeroImg.png"
-        alt="Press Release Hero"
-        className="absolute inset-0 w-full h-full object-fill"
+        alt="Career Hero"
+        className="absolute inset-0 w-full h-full object-fill hidden sm:block"
       />
 
       {/* Text Content */}

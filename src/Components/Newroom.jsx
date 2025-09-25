@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useCallback } from "react";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const Newsroom = () => {
-  const years = [2019, 2020, 2021, 2022, 2023, 2024, 2025];
+  const years = [2024, 2025];
   const [activeIndex, setActiveIndex] = useState(years.length - 1); // Start with latest year
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
@@ -27,121 +28,22 @@ const Newsroom = () => {
 
   // 📰 News Data
   const newsData = {
-    2019: [
-      {
-        title:
-          "Tapi Tubes establishes advanced manufacturing capabilities with state-of-the-art technology",
-        location: "Mumbai",
-        date: "December 2019",
-      },
-      {
-        title:
-          "Strategic partnership with leading infrastructure companies announced for nationwide expansion",
-        location: "Delhi",
-        date: "June 2020",
-      },
-      {
-        title: "Strategic expansion into new market segments across India",
-        location: "Delhi",
-        date: "September 2019",
-      },
-    ],
-    2020: [
-      {
-        title:
-          "Tapi Tubes establishes state-of-the-art manufacturing unit with advanced ERW technology",
-        location: "Mumbai",
-        date: "February 2020",
-      },
-      {
-        title:
-          "Strategic partnership with leading infrastructure companies announced for nationwide expansion",
-        location: "Delhi",
-        date: "June 2020",
-      },
-      {
-        title:
-          "Launch of eco-friendly steel pipe production initiative for sustainable manufacturing",
-        location: "Chennai",
-        date: "October 2020",
-      },
-    ],
-    2021: [
-      {
-        title:
-          "Tapi Tubes expands production capacity with new facilities to meet growing demand",
-        location: "Pune",
-        date: "March 2021",
-      },
-      {
-        title:
-          "Breakthrough in innovative tube technology introduced for enhanced structural integrity",
-        location: "Mumbai",
-        date: "July 2021",
-      },
-      {
-        title:
-          "Awarded recognition for environmental sustainability practices in steel manufacturing",
-        location: "Bangalore",
-        date: "November 2021",
-      },
-    ],
-    2022: [
-      {
-        title:
-          "Tapi Tubes introduces advanced grades of steel tubes for specialized industrial applications",
-        location: "Delhi",
-        date: "January 2022",
-      },
-      {
-        title:
-          "Partnership with renewable energy projects for green steel solutions and sustainable development",
-        location: "Chennai",
-        date: "May 2022",
-      },
-      {
-        title:
-          "Completion of digital transformation across manufacturing units for enhanced efficiency",
-        location: "Mumbai",
-        date: "September 2022",
-      },
-    ],
-    2023: [
-      {
-        title:
-          "New ERW pipe plant established in Chennai with cutting-edge manufacturing technology",
-        location: "Chennai",
-        date: "March 2023",
-      },
-      {
-        title:
-          "Tapi Tubes wins national award for innovation in steel solutions and engineering excellence",
-        location: "Mumbai",
-        date: "June 2023",
-      },
-      {
-        title:
-          "Expansion in production capacity for structural tubes to serve infrastructure projects",
-        location: "Delhi",
-        date: "August 2023",
-      },
-    ],
     2024: [
       {
         title:
-          "Tapi Tubes launches advanced ERW technology – unique import substitute to power India's infrastructure development",
+          "Tapi Tubes launches advanced ERW technology to power India’s infrastructure.",
         location: "Mumbai",
         date: "September 2024",
       },
       {
         title:
-          "Tapi Tubes launches premium grade tubes, world-class product with enhanced durability and longest warranty",
+          "Tapi Tubes launches premium grade tubes, world-class product with enhanced durability.",
         location: "Mumbai",
         date: "August 2024",
       },
       {
         title:
-          "Tapi Tubes expands partnership network to advance sustainable steel manufacturing initiatives",
+          "Tapi Tubes expands partnership network to advance sustainable steel manufacturing initiatives.",
         location: "Mumbai",
         date: "March 2024",
       },
@@ -149,68 +51,71 @@ const Newsroom = () => {
     2025: [
       {
         title:
-          "Tapi Tubes unveils next-generation steel tube solutions for modern infrastructure challenges",
+          "Tapi Tubes unveils next-generation steel tube solutions for modern infrastructure challenges.",
         location: "Delhi",
         date: "February 2025",
       },
       {
         title:
-          "Achieves major milestone towards carbon-neutral steel production with innovative green technology",
+          "Achieves major milestone towards carbon-neutral steel production with innovative green technology.",
         location: "Mumbai",
         date: "June 2025",
       },
       {
         title:
-          "Tapi Tubes announces global expansion through strategic partnerships and international collaborations",
+          "Tapi Tubes announces global expansion through strategic partnerships and international collaborations.",
         location: "Bangalore",
         date: "October 2025",
       },
     ],
   };
 
-  const animateToYear = (newIndex) => {
-    if (isAnimating.current || newIndex === activeIndex) return;
+  const animateToYear = useCallback(
+    (newIndex) => {
+      if (isAnimating.current || newIndex === activeIndex) return;
 
-    isAnimating.current = true;
+      isAnimating.current = true;
 
-    const tl = gsap.timeline({
-      onComplete: () => {
-        setActiveIndex(newIndex);
-        isAnimating.current = false;
-      },
-    });
+      const tl = gsap.timeline({
+        onComplete: () => {
+          setActiveIndex(newIndex);
+          isAnimating.current = false;
+        },
+      });
 
-    // Animate shape
-    tl.to(shapeRef.current, {
-      scaleX: 1,
-      duration: 0.4,
-      ease: "back.out(1.7)",
-    });
+      // Animate shape
+      tl.to(shapeRef.current, {
+        scaleX: 1,
+        duration: 0.4,
+        ease: "back.out(1.7)",
+      });
 
-    // Animate content
-    const items = contentItemsRef.current.filter(Boolean);
-    tl.to(
-      items,
-      {
-        opacity: 0,
-        x: 30,
-        stagger: 0.05,
-        duration: 0.3,
-        ease: "power2.in",
-      },
-      0
-    ).to(
-      items,
-      {
-        opacity: 1,
-        x: 0,
-        stagger: 0.08,
-        duration: 0.5,
-        ease: "power2.out",
-      },
-      0.4
-    );
-  };
+      // Animate content
+      const items = contentItemsRef.current.filter(Boolean);
+      tl.to(
+        items,
+        {
+          opacity: 0,
+          x: 30,
+          stagger: 0.05,
+          duration: 0.3,
+          ease: "power2.in",
+        },
+        0
+      ).to(
+        items,
+        {
+          opacity: 1,
+          x: 0,
+          stagger: 0.08,
+          duration: 0.5,
+          ease: "power2.out",
+        },
+        0.4
+      );
+    },
+    [activeIndex]
+  );
 
   // 🎬 ScrollTrigger setup
   useEffect(() => {
@@ -310,7 +215,7 @@ const Newsroom = () => {
       <div className="relative z-10 flex h-full items-center justify-center">
         <div className="w-full max-w-7xl px-4 md:px-8 flex flex-col lg:flex-row lg:gap-[7.75rem] items-center">
           {/* Left side - Year with shape */}
-          <div className="flex-none relative mb-[-2rem] lg:mb-0 lg:mr-16">
+          <div className="flex-none relative mb-[2rem] lg:mb-0 lg:mr-16">
             <div
               ref={shapeRef}
               className="absolute inset-0 bg-[#405FFC]"
@@ -348,7 +253,7 @@ const Newsroom = () => {
                     ref={(el) => {
                       if (el) contentItemsRef.current[idx] = el;
                     }}
-                    className="group cursor-pointer transition-all duration-300"
+                    className="group select-none transition-all duration-300"
                   >
                     <h3 className="text-base md:text-lg lg:text-xl xl:text-2xl font-normal mb-3 md:mb-4 lg:mb-6 leading-relaxed group-hover:text-[#405FFC] transition-colors duration-300">
                       {item.title}

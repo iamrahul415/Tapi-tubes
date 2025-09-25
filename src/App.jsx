@@ -21,7 +21,7 @@ function ScrollToTop() {
       window.scrollTo({
         top: 0,
         left: 0,
-        behavior: "auto", // Use 'auto' instead of 'smooth' for immediate scroll
+        behavior: "smooth", // Use 'auto' instead of 'smooth' for immediate scroll
       });
     }, 0);
 

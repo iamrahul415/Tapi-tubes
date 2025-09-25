@@ -2,17 +2,43 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 function MenuOverlay({ open, onClose }) {
-  // Stop body scroll when overlay is open
- useEffect(() => {
+  // Enhanced scroll prevention for mobile and desktop
+  useEffect(() => {
     if (open) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = ""; // Revert to default overflow
+      // Store current scroll position
+      const scrollY = window.scrollY;
+      
+      // Apply styles to prevent scrolling
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
+      document.body.style.overflow = 'hidden';
+      
+      // Additional prevention for iOS Safari
+      const preventDefault = (e) => {
+        e.preventDefault();
+      };
+      
+      // Add touch event listeners to prevent scroll
+      document.addEventListener('touchmove', preventDefault, { passive: false });
+      document.addEventListener('wheel', preventDefault, { passive: false });
+      
+      return () => {
+        // Restore scroll position and body styles
+        const bodyTop = parseInt(document.body.style.top || '0', 10);
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.width = '';
+        document.body.style.overflow = '';
+        
+        // Restore scroll position
+        window.scrollTo(0, Math.abs(bodyTop));
+        
+        // Remove event listeners
+        document.removeEventListener('touchmove', preventDefault);
+        document.removeEventListener('wheel', preventDefault);
+      };
     }
-
-    return () => {
-      document.body.style.overflow = ""; // Revert to default overflow on unmount
-    };
   }, [open]);
 
   if (!open) return null;
@@ -45,7 +71,7 @@ function MenuOverlay({ open, onClose }) {
     {
       number: "05",
       label: "Newsroom",
-      to: "/PressReleasePage",
+      to: "/",
       sub: ["Press Releases"],
     },
     {

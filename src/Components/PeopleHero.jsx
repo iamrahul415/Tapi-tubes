@@ -1,11 +1,18 @@
 const PeopleHero = () => {
   return (
     <section className="relative w-full h-[50vh] sm:h-[80vh] md:h-[90vh] flex items-end justify-center overflow-hidden">
-      {/* Background Image */}
+      {/* Background Image - Mobile */}
+      <img
+        src="/assets/JobMobImg.png"
+        alt="Career Hero Mobile"
+        className="absolute inset-0 w-full h-full object-cover sm:hidden"
+      />
+
+      {/* Background Image - Tablet/Desktop */}
       <img
         src="/assets/PeopleHeroImg.png"
-        alt="Team Hero"
-        className="absolute inset-0 w-full h-full object-fill"
+        alt="Career Hero"
+        className="absolute inset-0 w-full h-full object-fill hidden sm:block"
       />
 
       {/* Centered Heading at bottom */}
