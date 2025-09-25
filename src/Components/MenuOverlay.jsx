@@ -3,15 +3,15 @@ import { Link } from "react-router-dom";
 
 function MenuOverlay({ open, onClose }) {
   // Stop body scroll when overlay is open
-  useEffect(() => {
+ useEffect(() => {
     if (open) {
       document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = "hidden";
+      document.body.style.overflow = ""; // Revert to default overflow
     }
 
     return () => {
-      document.body.style.overflow = "hidden";
+      document.body.style.overflow = ""; // Revert to default overflow on unmount
     };
   }, [open]);
 
@@ -123,7 +123,7 @@ function MenuOverlay({ open, onClose }) {
                                 {link.sub.map((sublink, i) => (
                                   <span
                                     key={i}
-                                    className="hover:text-[#405FFC] cursor-pointer transition-colors duration-300"
+                                    className="hover:text-[#405FFC] transition-colors duration-300"
                                   >
                                     {sublink}
                                   </span>
@@ -150,7 +150,7 @@ function MenuOverlay({ open, onClose }) {
                     className="flex items-center gap-2 text-[#405FFC] hover:text-white transition-colors duration-300"
                   >
                     <img src="../assets/Email.png" alt="email" className="w-4 h-4" />
-                    <span className="text-[16px] leading-tight">contact@tapitubes.com</span>
+                    <span className="text-[14px] leading-tight">contact@tapitubes.com</span>
                   </a>
                   <a
                     href="tel:181144421145"
