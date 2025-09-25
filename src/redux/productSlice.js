@@ -11,7 +11,7 @@ const initialState = {
   selectedProductError: null,
 };
 
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+const BASE_URL = "https://tapi-tubes-server.onrender.com";
 
 // Async thunk for fetching products
 export const fetchProducts = createAsyncThunk(
