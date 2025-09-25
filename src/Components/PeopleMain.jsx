@@ -30,7 +30,7 @@ function PeopleMain() {
 
     const interval = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % teamMembers.length);
-    }, 2000);
+    }, 4000);
 
     return () => clearInterval(interval);
   }, [paused, teamMembers.length]);
@@ -194,10 +194,10 @@ function PeopleMain() {
         className="mt-14 max-w-5xl mx-auto rounded-2xl overflow-hidden cursor-pointer transform transition-all duration-500 hover:scale-[1.02] 
              border border-transparent hover:border-blue-500 shadow-lg hover:shadow-[0_0_25px_5px_rgba(59,130,246,0.6)]"
       >
-        <div className="grid md:grid-cols-2 gap-8 items-center p-8 bg-gray-900/60 rounded-2xl">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center p-8 bg-gray-900/60 rounded-2xl">
           {/* Text */}
           <div ref={textRef} className="text-left">
-            <h2 className="text-4xl md:text-5xl font-normal font-inspiration text-center mb-6">
+            <h2 className="text-4xl md:text-5xl font-normal font-serif text-center mb-6">
               {activeProfile.name}
             </h2>
             <p className="text-gray-300 leading-relaxed text-justify">
@@ -205,8 +205,8 @@ function PeopleMain() {
             </p>
           </div>
 
-          {/* Image */}
-          <div ref={imageRef} className="flex justify-center md:justify-end">
+          {/* Image - Hidden on mobile, visible on md and up */}
+          <div ref={imageRef} className="hidden md:flex justify-center md:justify-end">
             <img
               src={activeProfile.image.url}
               alt={activeProfile.name}
