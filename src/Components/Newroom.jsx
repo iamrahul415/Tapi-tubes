@@ -94,7 +94,7 @@ export default function Newsroom({ offset, scaleFactor }) {
       {/* Cards Section */}
       <div className="flex-1 w-full flex items-center justify-center">
         <div className="relative 
-                        h-[28rem] w-[20rem]       /* 📱 Mobile */
+                        h-[35rem] w-[22rem]       /* 📱 Mobile */
                         md:h-[22rem] md:w-[28rem] /* 💻 Tablet */
                         lg:h-[36rem] lg:w-[52rem]">
           {cards.map((card, index) => (
