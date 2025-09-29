@@ -103,7 +103,7 @@ export default function Newsroom({ offset, scaleFactor }) {
               className="absolute bg-black 
                          h-full w-full 
                          rounded-3xl p-6 md:p-8 
-                         shadow-xl border border-gray-800 shadow-white/[0.1] 
+                         shadow-xl border border-gray-800 shadow-blue-900/40
                          flex flex-col"
               style={{
                 transformOrigin: "top center",
