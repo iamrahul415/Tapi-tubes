@@ -10,7 +10,9 @@ import {
   clearSelectedProductConditional,
 } from "../redux/productSlice";
 
+
 import SendEnquiry from "@/Components/SendEnquiry";
+
 
 // Product Hero Component
 const ProductHero = React.memo(({ title, heroImage, heroAlt }) => {
@@ -24,6 +26,7 @@ const ProductHero = React.memo(({ title, heroImage, heroAlt }) => {
       />
       {/* Overlay */}
       <div className="absolute inset-0 bg-black/40"></div> 
+
 
       {/* Centered Heading */}
       <h1
@@ -39,13 +42,16 @@ const ProductHero = React.memo(({ title, heroImage, heroAlt }) => {
   );
 });
 
+
 ProductHero.displayName = 'ProductHero';
+
 
 // Product Description Component
 const ProductPara = React.memo(({ description }) => {
   const paragraphs = useMemo(() => {
     return Array.isArray(description) ? description : description.split('\\n');
   }, [description]);
+
 
   return (
     <section className="w-full bg-black text-white py-12 sm:py-16 px-4 sm:px-6 md:px-12 lg:px-20">
@@ -58,7 +64,9 @@ const ProductPara = React.memo(({ description }) => {
   );
 });
 
+
 ProductPara.displayName = 'ProductPara';
+
 
 // Product Benefits Component
 const ProductBenefit = React.memo(({ benefits, benefitImages }) => {
@@ -79,6 +87,7 @@ const ProductBenefit = React.memo(({ benefits, benefitImages }) => {
             <div className="absolute inset-0 bg-gradient-to-l from-black/90 to-transparent rounded-xl"></div>
           </div>
 
+
           {/* Second Image - Centered below */}
           <div className="flex justify-center mt-6 relative z-20">
             <img
@@ -88,6 +97,7 @@ const ProductBenefit = React.memo(({ benefits, benefitImages }) => {
             />
           </div>
         </div>
+
 
         {/* Right Side - Benefits */}
         <div className="flex flex-col justify-start self-start">
@@ -107,7 +117,9 @@ const ProductBenefit = React.memo(({ benefits, benefitImages }) => {
   );
 });
 
+
 ProductBenefit.displayName = 'ProductBenefit';
+
 
 // Product Applications Component
 const ProductApplication = React.memo(({ applications }) => {
@@ -130,6 +142,7 @@ const ProductApplication = React.memo(({ applications }) => {
           </ul>
         </div>
 
+
         {/* Right Side - Image with Overlay + Fade */}
         <div className="relative w-full h-full flex items-center">
           <img
@@ -145,7 +158,42 @@ const ProductApplication = React.memo(({ applications }) => {
   );
 });
 
+
 ProductApplication.displayName = 'ProductApplication';
+
+
+// Size Charts Component - NEW
+const ProductSizeChart = React.memo(({ sizeCharts }) => {
+  if (!sizeCharts || sizeCharts.length === 0) return null;
+
+  return (
+    <section className="w-full bg-black text-white py-16 px-6 md:px-20">
+      <div className="max-w-6xl mx-auto">
+        <h2 className="text-3xl md:text-4xl font-bold text-[#405FFC] mb-8 text-center">
+          Size Charts
+        </h2>
+        <div className="space-y-6">
+          {sizeCharts.map((chart, index) => (
+            <div
+              key={index}
+              className="relative w-full overflow-hidden rounded-xl shadow-lg"
+            >
+              <img
+                src={chart.url}
+                alt={`Size Chart ${index + 1}`}
+                className="w-full h-auto object-contain"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+});
+
+
+ProductSizeChart.displayName = 'ProductSizeChart';
+
 
 // Main ProductDetails Component
 function ProductDetails() {
@@ -153,9 +201,11 @@ function ProductDetails() {
   const dispatch = useDispatch();
   const hasTriedRedirect = useRef(false);
 
+
   const productData = useSelector(selectSelectedProduct);
   const loading = useSelector(selectSelectedProductLoading);
   const error = useSelector(selectSelectedProductError);
+
 
   // ✅ FIX 1: Fetch product data first
   useEffect(() => {
@@ -169,6 +219,7 @@ function ProductDetails() {
     }
   }, [productId, productData?._id, dispatch]);
 
+
   // ✅ FIX 2: Better cleanup that checks the current path
   useEffect(() => {
     return () => {
@@ -179,6 +230,7 @@ function ProductDetails() {
     };
   }, [dispatch]);
 
+
   // ✅ FIX 3: Memoize computed values to prevent unnecessary re-renders
   const processedBenefits = useMemo(() => {
     return productData?.benefits?.map(b => ({ 
@@ -186,6 +238,7 @@ function ProductDetails() {
       description: b.description || "" 
     })) || [];
   }, [productData?.benefits]);
+
 
   const processedApplications = useMemo(() => {
     return {
@@ -199,9 +252,11 @@ function ProductDetails() {
     };
   }, [productData?.applications, productData?.extraImages]);
 
+
   const benefitImages = useMemo(() => ({
     primary: productData?.extraImages?.[0]?.url,
   }), [productData?.extraImages]);
+
 
   // Show loading state
   if (loading) {
@@ -212,11 +267,13 @@ function ProductDetails() {
     );
   }
 
+
   // Show error state and redirect
   if (error) {
     console.log('Product fetch failed with error, redirecting:', error);
     return <Navigate to="/product" replace />;
   }
+
 
   // Wait for data to load - don't redirect immediately
   if (!productData && productId) {
@@ -227,17 +284,21 @@ function ProductDetails() {
     );
   }
 
+
   // Only redirect if we have no productId (invalid URL)
   if (!productId) {
     return <Navigate to="/product" replace />;
   }
+
 
   // Don't render if we don't have product data yet
   if (!productData) {
     return null;
   }
 
+
   console.log('Rendering ProductDetails with data:', productData._id);
+
 
   return (
     <div className="w-full min-h-screen text-white">
@@ -249,16 +310,22 @@ function ProductDetails() {
       
       <ProductPara description={productData.description} />
 
+
       <ProductBenefit
         benefits={processedBenefits}
         benefitImages={benefitImages}
       />
 
+
       <ProductApplication applications={processedApplications} />
+
+      <ProductSizeChart sizeCharts={productData.sizeCharts} />
+
 
       {productData.showEnquiry && <SendEnquiry />}
     </div>
   );
 }
+
 
 export default ProductDetails;
